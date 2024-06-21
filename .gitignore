@@ -20,3 +20,9 @@
 # Go workspace file
 go.work
 go.work.sum
+
+# Configuration
+config.json
+
+# Idea
+.idea
