@@ -5,25 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4abf41ec-0e44-42bc-a8c1-d584190449ba" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/config/app.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/config/fiber.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/config/gorm.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/config/kafka.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/config/logrus.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/config/validator.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/config/viper.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/entity/user.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/model/auth.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/model/converter/user_converter.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/model/event.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/model/model.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/model/user_event.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/model/user_model.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/config.example.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/delivery/http/controller/user_controller.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/delivery/http/middleware/auth.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/delivery/http/route/route.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/delivery/messaging/consumer.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/delivery/messaging/user_consumer.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/gateway/messaging/producer.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/gateway/messaging/user_producer.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/repository/repository.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/repository/user_repository.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/service/user_service.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/helpers_test.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/init.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/user_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
