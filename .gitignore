@@ -23,6 +23,7 @@ go.work.sum
 
 # Configuration
 config.json
+docker-compose.yml
 
 # Idea
 .idea
