@@ -1,0 +1,1 @@
+DROP TABLE detail_transactions;
