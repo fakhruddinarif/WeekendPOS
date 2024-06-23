@@ -2,7 +2,7 @@ package messaging
 
 import (
 	"context"
-	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
+	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/sirupsen/logrus"
 	"time"
 )
@@ -33,7 +33,7 @@ func ConsumeTopic(ctx context.Context, consumer *kafka.Consumer, topic string, l
 						log.Fatalf("Failed to commit message: %v", err)
 					}
 				}
-			} else if !err.(kafka.Error).IsTimeout() {
+			} else if !err.(kafka.Error).IsRetriable() {
 				log.Warnf("Consumer error: %v (%v)\n", err, message)
 			}
 		}

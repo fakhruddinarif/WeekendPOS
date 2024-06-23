@@ -86,12 +86,12 @@ func (c *UserService) Create(ctx context.Context, request *model.RegisterUserReq
 	}
 
 	user := &entity.User{
-		ID:       uuid.New().String(),
 		Username: request.Username,
 		Password: string(password),
 		Name:     request.Name,
 		Email:    request.Email,
 		Phone:    request.Phone,
+		Photo:    request.Photo,
 	}
 
 	if err := c.UserRepository.Create(tx, user); err != nil {

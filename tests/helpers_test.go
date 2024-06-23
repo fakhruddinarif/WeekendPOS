@@ -6,6 +6,13 @@ import (
 	"testing"
 )
 
+func ClearUsers() {
+	err := db.Where("id IS NOT NULL").Delete(&entity.User{}).Error
+	if err != nil {
+		log.Fatalf("Failed clear user data : %+v", err)
+	}
+}
+
 func GetFirstUser(t *testing.T) *entity.User {
 	user := new(entity.User)
 	err := db.First(user).Error

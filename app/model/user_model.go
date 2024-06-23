@@ -8,6 +8,7 @@ type UserResponse struct {
 	Username  string    `json:"username,omitempty"`
 	Email     string    `json:"email,omitempty"`
 	Phone     string    `json:"phone,omitempty"`
+	Photo     string    `json:"photo,omitempty"`
 	Token     string    `json:"token,omitempty"`
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
@@ -18,11 +19,12 @@ type VerifyUserRequest struct {
 }
 
 type RegisterUserRequest struct {
-	Name     string `validate:"required, max=255" json:"name"`
-	Username string `validate:"required, max=255" json:"username"`
-	Password string `validate:"required, max=255" json:"password"`
-	Email    string `validate:"required, max=255" json:"email"`
-	Phone    string `validate:"required, max=16" json:"phone"`
+	Name     string `validate:"required,max=255" json:"name"`
+	Username string `validate:"required,max=255" json:"username"`
+	Password string `validate:"required,max=255" json:"password"`
+	Email    string `validate:"required,max=255" json:"email"`
+	Phone    string `validate:"max=16" json:"phone"`
+	Photo    string `validate:"max=255" json:"photo"`
 }
 
 type UpdateUserRequest struct {
@@ -30,6 +32,7 @@ type UpdateUserRequest struct {
 	Email    string `validate:"required, max=255" json:"email"`
 	Phone    string `validate:"required, max=16" json:"phone"`
 	Password string `validate:"required, max=255" json:"password"`
+	Photo    string `validate:"max=255" json:"photo"`
 }
 
 type LoginUserRequest struct {

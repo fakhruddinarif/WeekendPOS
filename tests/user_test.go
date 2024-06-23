@@ -12,6 +12,7 @@ import (
 )
 
 func TestRegisterSuccess(t *testing.T) {
+	ClearUsers()
 	requestBody := model.RegisterUserRequest{
 		Name:     "John Doe",
 		Email:    "johndoe@gmail.com",

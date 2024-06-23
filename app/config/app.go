@@ -7,7 +7,7 @@ import (
 	"WeekendPOS/app/gateway/messaging"
 	"WeekendPOS/app/repository"
 	"WeekendPOS/app/service"
-	"github.com/confluentinc/confluent-kafka-go/v2/kafka"
+	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
