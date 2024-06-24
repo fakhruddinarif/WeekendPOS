@@ -154,3 +154,111 @@ func (s *UserService) Login(ctx context.Context, request *model.LoginUserRequest
 
 	return converter.UserToTokenResponse(user), nil
 }
+
+func (s *UserService) Get(ctx context.Context, request *model.GetUserRequest) (*model.UserResponse, error) {
+	tx := s.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	if err := s.Validate.Struct(request); err != nil {
+		s.Log.Warnf("Invalid request body : %+v", err)
+		return nil, fiber.ErrBadRequest
+	}
+
+	user := new(entity.User)
+	if err := s.UserRepository.FindById(tx, user, request.ID); err != nil {
+		s.Log.Warnf("Failed find user by id : %+v", err)
+		return nil, fiber.ErrNotFound
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		s.Log.Warnf("Failed commit transaction : %+v", err)
+		return nil, fiber.ErrInternalServerError
+	}
+	return converter.UserToResponse(user), nil
+}
+
+func (s *UserService) Update(ctx context.Context, request *model.UpdateUserRequest) (*model.UserResponse, error) {
+	tx := s.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	if err := s.Validate.Struct(request); err != nil {
+		s.Log.Warnf("Invalid request body : %+v", err)
+		return nil, fiber.ErrBadRequest
+	}
+
+	user := new(entity.User)
+	if err := s.UserRepository.FindById(tx, user, request.ID); err != nil {
+		s.Log.Warnf("Failed find user by id : %+v", err)
+		return nil, fiber.ErrNotFound
+	}
+
+	setIfNotEmpty(&user.Name, request.Name)
+	setIfNotEmpty(&user.Email, request.Email)
+	setIfNotEmpty(&user.Phone, request.Phone)
+	setIfNotEmpty(&user.Username, request.Username)
+	if request.Password != "" {
+		password, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
+		if err != nil {
+			s.Log.Warnf("Failed to generate bcrype hash : %+v", err)
+			return nil, fiber.ErrInternalServerError
+		}
+		user.Password = string(password)
+	}
+	if err := s.UserRepository.Update(tx, user); err != nil {
+		s.Log.Warnf("Failed save user : %+v", err)
+		return nil, fiber.ErrInternalServerError
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		s.Log.Warnf("Failed commit transaction : %+v", err)
+		return nil, fiber.ErrInternalServerError
+	}
+	event := converter.UserToEvent(user)
+	s.Log.Info("Publishing user updated event")
+	if err := s.UserProducer.Send(event); err != nil {
+		s.Log.Warnf("Failed publish user updated event : %+v", err)
+		return nil, fiber.ErrInternalServerError
+	}
+	return converter.UserToResponse(user), nil
+}
+
+func (s *UserService) Logout(ctx context.Context, request *model.LogoutUserRequest) (bool, error) {
+	tx := s.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	if err := s.Validate.Struct(request); err != nil {
+		s.Log.Warnf("Invalid request body : %+v", err)
+		return false, fiber.ErrBadRequest
+	}
+
+	user := new(entity.User)
+	if err := s.UserRepository.FindById(tx, user, request.ID); err != nil {
+		s.Log.Warnf("Failed find user by id : %+v", err)
+		return false, fiber.ErrNotFound
+	}
+
+	user.Token = ""
+	if err := s.UserRepository.Update(tx, user); err != nil {
+		s.Log.Warnf("Failed save user : %+v", err)
+		return false, fiber.ErrInternalServerError
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		s.Log.Warnf("Failed commit transaction : %+v", err)
+		return false, fiber.ErrInternalServerError
+	}
+
+	event := converter.UserToEvent(user)
+	s.Log.Info("Publishing user updated event")
+	if err := s.UserProducer.Send(event); err != nil {
+		s.Log.Warnf("Failed publish user updated event : %+v", err)
+		return false, fiber.ErrInternalServerError
+	}
+	return true, nil
+}
+
+func setIfNotEmpty(target *string, value string) {
+	if value != "" {
+		*target = value
+	}
+}

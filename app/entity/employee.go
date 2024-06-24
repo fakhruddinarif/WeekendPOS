@@ -1,6 +1,10 @@
 package entity
 
-import "time"
+import (
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+	"time"
+)
 
 type Employee struct {
 	ID           string        `gorm:"column:id;primaryKey;type:char(36);not null;unique;index"`
@@ -12,6 +16,7 @@ type Employee struct {
 	Address      string        `gorm:"column:address;type:varchar(255);null"`
 	Photo        string        `gorm:"column:photo;type:varchar(255);null"`
 	User         User          `gorm:"foreignKey:user_id;references:id"`
+	UserId       string        `gorm:"column:user_id;type:char(36);not null"`
 	Transactions []Transaction `gorm:"foreignKey:employee_id;references:id"`
 	CreatedAt    time.Time     `gorm:"column:created_at;autoCreateTime:milli"`
 	UpdatedAt    time.Time     `gorm:"column:updated_at;autoUpdateTime:milli;autoCreateTime:milli"`
@@ -19,4 +24,9 @@ type Employee struct {
 
 func (e *Employee) TableName() string {
 	return "employees"
+}
+
+func (e *Employee) BeforeCreate(tx *gorm.DB) (err error) {
+	e.ID = uuid.New().String()
+	return
 }

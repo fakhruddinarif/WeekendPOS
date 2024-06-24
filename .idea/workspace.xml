@@ -4,20 +4,18 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4abf41ec-0e44-42bc-a8c1-d584190449ba" name="Changes" comment="fix: success create unit test register and downgrade kafka package">
-      <change afterPath="$PROJECT_DIR$/app/entity/category.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/entity/detail_transaction.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/entity/employee.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/entity/product.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/entity/transaction.go" afterDir="false" />
+    <list default="true" id="4abf41ec-0e44-42bc-a8c1-d584190449ba" name="Changes" comment="feat: create entity category, detail transcation, employee, product, and transaction">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/entity/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/entity/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/delivery/http/controller/user_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/delivery/http/controller/user_controller.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/delivery/http/route/route.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/delivery/http/route/route.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/entity/category.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/entity/category.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/entity/detail_transaction.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/entity/detail_transaction.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/entity/employee.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/entity/employee.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/entity/product.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/entity/product.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/entity/transaction.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/entity/transaction.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/model/user_model.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/user_model.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/service/user_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/service/user_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.example.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.example.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/migrations/20240622101955_create_table_users.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db/migrations/20240622101955_create_table_users.up.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/migrations/20240622113123_create_table_employees.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db/migrations/20240622113123_create_table_employees.up.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/user_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/tests/user_test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,11 +48,19 @@
   "keyToString": {
     "DefaultGoTemplateProperty": "Go File",
     "Go Build.go build WeekendPOS.executor": "Run",
+    "Go Test.TestGetUserSuccess in WeekendPOS/tests.executor": "Run",
+    "Go Test.TestLoginSuccess in WeekendPOS/tests.executor": "Run",
+    "Go Test.TestLoginWrongPassword in WeekendPOS/tests.executor": "Run",
+    "Go Test.TestLoginWrongUsername in WeekendPOS/tests.executor": "Run",
+    "Go Test.TestLogoutSuccess in WeekendPOS/tests.executor": "Run",
+    "Go Test.TestRegisterFailed in WeekendPOS/tests.executor": "Run",
     "Go Test.TestRegisterSuccess in WeekendPOS/tests (1).executor": "Run",
     "Go Test.TestRegisterSuccess in WeekendPOS/tests (2).executor": "Run",
     "Go Test.TestRegisterSuccess in WeekendPOS/tests (3).executor": "Run",
     "Go Test.TestRegisterSuccess in WeekendPOS/tests (4).executor": "Run",
     "Go Test.TestRegisterSuccess in WeekendPOS/tests.executor": "Run",
+    "Go Test.TestRegisterUsernameAlreadyExist in WeekendPOS/tests.executor": "Run",
+    "Go Test.TestUpdateUsernameSuccess in WeekendPOS/tests.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
@@ -70,17 +76,8 @@
     "settings.editor.selected.configurable": "editor.preferences.fonts.default"
   }
 }]]></component>
-  <component name="RunManager" selected="Go Test.TestRegisterSuccess in WeekendPOS/tests">
-    <configuration name="go build WeekendPOS" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
-      <module name="WeekendPOS" />
-      <working_directory value="$PROJECT_DIR$" />
-      <kind value="PACKAGE" />
-      <package value="WeekendPOS" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$/main.go" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TestRegisterSuccess in WeekendPOS/tests (2)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Go Test.TestLogoutSuccess in WeekendPOS/tests">
+    <configuration name="TestGetUserSuccess in WeekendPOS/tests" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="WeekendPOS" />
       <working_directory value="$PROJECT_DIR$/tests" />
       <root_directory value="$PROJECT_DIR$" />
@@ -89,10 +86,10 @@
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$" />
       <framework value="gotest" />
-      <pattern value="^\QTestRegisterSuccess\E$" />
+      <pattern value="^\QTestGetUserSuccess\E$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestRegisterSuccess in WeekendPOS/tests (3)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestLoginWrongPassword in WeekendPOS/tests" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="WeekendPOS" />
       <working_directory value="$PROJECT_DIR$/tests" />
       <root_directory value="$PROJECT_DIR$" />
@@ -101,10 +98,10 @@
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$" />
       <framework value="gotest" />
-      <pattern value="^\QTestRegisterSuccess\E$" />
+      <pattern value="^\QTestLoginWrongPassword\E$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestRegisterSuccess in WeekendPOS/tests (4)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestLoginWrongUsername in WeekendPOS/tests" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="WeekendPOS" />
       <working_directory value="$PROJECT_DIR$/tests" />
       <root_directory value="$PROJECT_DIR$" />
@@ -113,10 +110,10 @@
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$" />
       <framework value="gotest" />
-      <pattern value="^\QTestRegisterSuccess\E$" />
+      <pattern value="^\QTestLoginWrongUsername\E$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestRegisterSuccess in WeekendPOS/tests" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestLogoutSuccess in WeekendPOS/tests" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="WeekendPOS" />
       <working_directory value="$PROJECT_DIR$/tests" />
       <root_directory value="$PROJECT_DIR$" />
@@ -125,16 +122,28 @@
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$" />
       <framework value="gotest" />
-      <pattern value="^\QTestRegisterSuccess\E$" />
+      <pattern value="^\QTestLogoutSuccess\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestUpdateUsernameSuccess in WeekendPOS/tests" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="WeekendPOS" />
+      <working_directory value="$PROJECT_DIR$/tests" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="WeekendPOS/tests" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestUpdateUsernameSuccess\E$" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Test.TestRegisterSuccess in WeekendPOS/tests" />
-        <item itemvalue="Go Test.TestRegisterSuccess in WeekendPOS/tests (4)" />
-        <item itemvalue="Go Build.go build WeekendPOS" />
-        <item itemvalue="Go Test.TestRegisterSuccess in WeekendPOS/tests (3)" />
-        <item itemvalue="Go Test.TestRegisterSuccess in WeekendPOS/tests (2)" />
+        <item itemvalue="Go Test.TestLogoutSuccess in WeekendPOS/tests" />
+        <item itemvalue="Go Test.TestUpdateUsernameSuccess in WeekendPOS/tests" />
+        <item itemvalue="Go Test.TestGetUserSuccess in WeekendPOS/tests" />
+        <item itemvalue="Go Test.TestLoginWrongPassword in WeekendPOS/tests" />
+        <item itemvalue="Go Test.TestLoginWrongUsername in WeekendPOS/tests" />
       </list>
     </recent_temporary>
   </component>
@@ -153,7 +162,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fix: solve problem kafka, but can't run app" />
     <MESSAGE value="fix: success create unit test register and downgrade kafka package" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix: success create unit test register and downgrade kafka package" />
+    <MESSAGE value="feat: create entity category, detail transcation, employee, product, and transaction" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: create entity category, detail transcation, employee, product, and transaction" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
