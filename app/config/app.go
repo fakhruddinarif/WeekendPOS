@@ -27,23 +27,28 @@ type BootstrapConfig struct {
 func Bootstrap(config *BootstrapConfig) {
 	// setup repositories
 	userRepository := repository.NewUserRepository(config.Log)
+	categoryRepository := repository.NewCategoryRepository(config.Log)
 
 	// setup producer
 	userProducer := messaging.NewUserProducer(config.Producer, config.Log)
+	categoryProducer := messaging.NewCategoryProducer(config.Producer, config.Log)
 
-	// setup use cases
-	userUseCase := service.NewUserService(config.DB, config.Log, config.Validate, userRepository, userProducer)
+	// setup service
+	userService := service.NewUserService(config.DB, config.Log, config.Validate, userRepository, userProducer)
+	categoryService := service.NewCategoryService(config.DB, config.Log, config.Validate, categoryRepository, categoryProducer)
 
 	// setup controller
-	userController := controller.NewUserController(userUseCase, config.Log)
+	userController := controller.NewUserController(userService, config.Log)
+	categoryController := controller.NewCategoryController(categoryService, config.Log)
 
 	// setup middleware
-	authMiddleware := middleware.NewAuth(userUseCase)
+	authMiddleware := middleware.NewAuth(userService)
 
 	routeConfig := route.RouteConfig{
-		App:            config.App,
-		UserController: userController,
-		AuthMiddleware: authMiddleware,
+		App:                config.App,
+		UserController:     userController,
+		CategoryController: categoryController,
+		AuthMiddleware:     authMiddleware,
 	}
 	routeConfig.Setup()
 }

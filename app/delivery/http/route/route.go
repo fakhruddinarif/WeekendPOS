@@ -6,9 +6,10 @@ import (
 )
 
 type RouteConfig struct {
-	App            *fiber.App
-	UserController *controller.UserController
-	AuthMiddleware fiber.Handler
+	App                *fiber.App
+	UserController     *controller.UserController
+	CategoryController *controller.CategoryController
+	AuthMiddleware     fiber.Handler
 }
 
 func (c *RouteConfig) Setup() {
@@ -23,7 +24,18 @@ func (c *RouteConfig) SetupGuestRoute() {
 
 func (c *RouteConfig) SetupAuthRoute() {
 	c.App.Use(c.AuthMiddleware)
-	c.App.Get("/api/user", c.UserController.Get)
-	c.App.Patch("/api/user", c.UserController.Update)
-	c.App.Delete("/api/user/logout", c.UserController.Logout)
+
+	// User
+	userRoutes := c.App.Group("/api/user", c.AuthMiddleware)
+	userRoutes.Get("/", c.UserController.Get)
+	userRoutes.Patch("/", c.UserController.Update)
+	userRoutes.Delete("/", c.UserController.Logout)
+
+	// Category
+	categoryRoutes := c.App.Group("/api/category", c.AuthMiddleware)
+	categoryRoutes.Post("/", c.CategoryController.Create)
+	categoryRoutes.Get("/", c.CategoryController.List)
+	categoryRoutes.Get("/:id", c.CategoryController.Get)
+	categoryRoutes.Put("/:id", c.CategoryController.Update)
+	categoryRoutes.Delete("/:id", c.CategoryController.Delete)
 }

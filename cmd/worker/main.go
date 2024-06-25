@@ -22,6 +22,11 @@ func main() {
 	userHandler := messaging.NewUserConsumer(logger)
 	go messaging.ConsumeTopic(ctx, userConsumer, "users", logger, userHandler.Consume)
 
+	logger.Info("setup category consumer")
+	categoryConsumer := config.NewKafkaConsumer(viperConfig, logger)
+	categoryHandler := messaging.NewCategoryConsumer(logger)
+	go messaging.ConsumeTopic(ctx, categoryConsumer, "categories", logger, categoryHandler.Consume)
+
 	logger.Info("Worker is running")
 
 	terminateSignals := make(chan os.Signal, 1)

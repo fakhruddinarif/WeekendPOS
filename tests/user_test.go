@@ -13,7 +13,7 @@ import (
 )
 
 func TestRegisterSuccess(t *testing.T) {
-	ClearUsers()
+	ClearAll()
 	requestBody := model.RegisterUserRequest{
 		Name:     "John Doe",
 		Email:    "johndoe@gmail.com",
@@ -103,7 +103,6 @@ func TestRegisterUsernameAlreadyExist(t *testing.T) {
 }
 
 func TestLoginSuccess(t *testing.T) {
-	ClearUsers()
 	TestRegisterSuccess(t)
 
 	requestBody := model.LoginUserRequest{
