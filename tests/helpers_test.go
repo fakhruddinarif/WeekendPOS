@@ -45,3 +45,10 @@ func GetFirstUser(t *testing.T) *entity.User {
 	assert.Nil(t, err)
 	return user
 }
+
+func GetFirstCategory(t *testing.T, user *entity.User) *entity.Category {
+	category := new(entity.Category)
+	err := db.Where("user_id = ?", user.ID).First(category).Error
+	assert.Nil(t, err)
+	return category
+}

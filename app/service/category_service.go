@@ -86,7 +86,7 @@ func (s *CategoryService) Search(ctx context.Context, request *model.SearchCateg
 
 	responses := make([]model.CategoryResponse, len(categories))
 	for i, category := range categories {
-		responses[i] = *converter.CategoryToResponse(category)
+		responses[i] = *converter.CategoryToResponse(&category)
 	}
 
 	return responses, total, nil

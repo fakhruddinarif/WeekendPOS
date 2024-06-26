@@ -376,7 +376,7 @@ func TestSearchCategoryWithFilter(t *testing.T) {
 
 	CreateCategories(user, 20)
 
-	request := httptest.NewRequest(http.MethodGet, "/api/category/?name=Category 1", nil)
+	request := httptest.NewRequest(http.MethodGet, "/api/category/?name=15", nil)
 	request.Header.Set("Content-Type", "application/json")
 	request.Header.Set("Accept", "application/json")
 	request.Header.Set("Authorization", user.Token)

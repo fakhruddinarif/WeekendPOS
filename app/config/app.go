@@ -28,18 +28,22 @@ func Bootstrap(config *BootstrapConfig) {
 	// setup repositories
 	userRepository := repository.NewUserRepository(config.Log)
 	categoryRepository := repository.NewCategoryRepository(config.Log)
+	productRepository := repository.NewProductRepository(config.Log)
 
 	// setup producer
 	userProducer := messaging.NewUserProducer(config.Producer, config.Log)
 	categoryProducer := messaging.NewCategoryProducer(config.Producer, config.Log)
+	productProducer := messaging.NewProductProducer(config.Producer, config.Log)
 
 	// setup service
 	userService := service.NewUserService(config.DB, config.Log, config.Validate, userRepository, userProducer)
 	categoryService := service.NewCategoryService(config.DB, config.Log, config.Validate, categoryRepository, categoryProducer)
+	productService := service.NewProductService(config.DB, config.Log, config.Validate, productRepository, categoryRepository, productProducer)
 
 	// setup controller
 	userController := controller.NewUserController(userService, config.Log)
 	categoryController := controller.NewCategoryController(categoryService, config.Log)
+	productController := controller.NewProductController(productService, config.Log)
 
 	// setup middleware
 	authMiddleware := middleware.NewAuth(userService)
@@ -48,6 +52,7 @@ func Bootstrap(config *BootstrapConfig) {
 		App:                config.App,
 		UserController:     userController,
 		CategoryController: categoryController,
+		ProductController:  productController,
 		AuthMiddleware:     authMiddleware,
 	}
 	routeConfig.Setup()

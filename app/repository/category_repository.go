@@ -21,11 +21,15 @@ func (r *CategoryRepository) FindByIdAndUserId(db *gorm.DB, category *entity.Cat
 	return db.Where("id = ? AND user_id = ?", id, user).Take(category).Error
 }
 
-func (r *CategoryRepository) Search(db *gorm.DB, request *model.SearchCategoryRequest) ([]*entity.Category, int64, error) {
-	var categories []*entity.Category
+func (r *CategoryRepository) Search(db *gorm.DB, request *model.SearchCategoryRequest) ([]entity.Category, int64, error) {
+	var categories []entity.Category
 	var total int64 = 0
 
 	if err := db.Scopes(r.Filter(request)).Offset((request.Page - 1) * request.Size).Limit(request.Size).Find(&categories).Error; err != nil {
+		return nil, total, err
+	}
+
+	if err := db.Model(&entity.Category{}).Scopes(r.Filter(request)).Count(&total).Error; err != nil {
 		return nil, total, err
 	}
 

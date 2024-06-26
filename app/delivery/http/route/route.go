@@ -9,6 +9,7 @@ type RouteConfig struct {
 	App                *fiber.App
 	UserController     *controller.UserController
 	CategoryController *controller.CategoryController
+	ProductController  *controller.ProductController
 	AuthMiddleware     fiber.Handler
 }
 
@@ -38,4 +39,8 @@ func (c *RouteConfig) SetupAuthRoute() {
 	categoryRoutes.Get("/:id", c.CategoryController.Get)
 	categoryRoutes.Put("/:id", c.CategoryController.Update)
 	categoryRoutes.Delete("/:id", c.CategoryController.Delete)
+
+	// Product
+	productRoutes := c.App.Group("/api/product", c.AuthMiddleware)
+	productRoutes.Post("/", c.ProductController.Create)
 }

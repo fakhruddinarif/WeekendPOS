@@ -4,23 +4,23 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4abf41ec-0e44-42bc-a8c1-d584190449ba" name="Changes" comment="test: success test section user">
-      <change afterPath="$PROJECT_DIR$/app/delivery/http/controller/category_controller.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/delivery/messaging/category_consumer.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/gateway/messaging/category_producer.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/model/category_event.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/model/category_model.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/model/converter/category_converter.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/repository/category_repository.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/service/category_service.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/tests/category_test.go" afterDir="false" />
+    <list default="true" id="4abf41ec-0e44-42bc-a8c1-d584190449ba" name="Changes" comment="test: success test section category">
+      <change afterPath="$PROJECT_DIR$/app/delivery/http/controller/product_controller.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/delivery/messaging/product_consumer.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/gateway/messaging/product_producer.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/model/converter/product_converter.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/model/product_event.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/model/product_model.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/repository/product_repository.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/service/product_service.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/product_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/config/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/config/app.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/delivery/http/route/route.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/delivery/http/route/route.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/worker/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/worker/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/migrations/20240622102927_create_table_categories.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db/migrations/20240622102927_create_table_categories.up.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/repository/category_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/repository/category_repository.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/service/category_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/service/category_service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/category_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/tests/category_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tests/helpers_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/tests/helpers_test.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/tests/user_test.go" beforeDir="false" afterPath="$PROJECT_DIR$/tests/user_test.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +55,7 @@
     "Go Build.go build WeekendPOS.executor": "Run",
     "Go Test.TestCreateCategoryFailed in WeekendPOS/tests.executor": "Run",
     "Go Test.TestCreateCategorySuccess in WeekendPOS/tests.executor": "Run",
+    "Go Test.TestCreateProductSuccess in WeekendPOS/tests.executor": "Run",
     "Go Test.TestDeleteCategorySuccess in WeekendPOS/tests.executor": "Run",
     "Go Test.TestGetUserSuccess in WeekendPOS/tests.executor": "Run",
     "Go Test.TestLoginSuccess in WeekendPOS/tests.executor": "Run",
@@ -68,8 +69,12 @@
     "Go Test.TestRegisterSuccess in WeekendPOS/tests (4).executor": "Run",
     "Go Test.TestRegisterSuccess in WeekendPOS/tests.executor": "Run",
     "Go Test.TestRegisterUsernameAlreadyExist in WeekendPOS/tests.executor": "Run",
+    "Go Test.TestSearchCategorySuccess in WeekendPOS/tests (1).executor": "Run",
     "Go Test.TestSearchCategorySuccess in WeekendPOS/tests.executor": "Run",
+    "Go Test.TestSearchCategoryWithFilter in WeekendPOS/tests (1).executor": "Run",
+    "Go Test.TestSearchCategoryWithFilter in WeekendPOS/tests.executor": "Run",
     "Go Test.TestUpdateUsernameSuccess in WeekendPOS/tests.executor": "Run",
+    "Go Test.go test WeekendPOS/tests (1).executor": "Run",
     "Go Test.go test WeekendPOS/tests.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
@@ -86,8 +91,8 @@
     "settings.editor.selected.configurable": "editor.preferences.fonts.default"
   }
 }]]></component>
-  <component name="RunManager" selected="Go Test.TestSearchCategorySuccess in WeekendPOS/tests">
-    <configuration name="TestCreateCategoryFailed in WeekendPOS/tests" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Go Test.TestCreateProductSuccess in WeekendPOS/tests">
+    <configuration name="TestCreateProductSuccess in WeekendPOS/tests" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="WeekendPOS" />
       <working_directory value="$PROJECT_DIR$/tests" />
       <root_directory value="$PROJECT_DIR$" />
@@ -96,34 +101,10 @@
       <directory value="$PROJECT_DIR$" />
       <filePath value="$PROJECT_DIR$" />
       <framework value="gotest" />
-      <pattern value="^\QTestCreateCategoryFailed\E$" />
+      <pattern value="^\QTestCreateProductSuccess\E$" />
       <method v="2" />
     </configuration>
-    <configuration name="TestCreateCategorySuccess in WeekendPOS/tests" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="WeekendPOS" />
-      <working_directory value="$PROJECT_DIR$/tests" />
-      <root_directory value="$PROJECT_DIR$" />
-      <kind value="PACKAGE" />
-      <package value="WeekendPOS/tests" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <framework value="gotest" />
-      <pattern value="^\QTestCreateCategorySuccess\E$" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TestDeleteCategorySuccess in WeekendPOS/tests" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
-      <module name="WeekendPOS" />
-      <working_directory value="$PROJECT_DIR$/tests" />
-      <root_directory value="$PROJECT_DIR$" />
-      <kind value="PACKAGE" />
-      <package value="WeekendPOS/tests" />
-      <directory value="$PROJECT_DIR$" />
-      <filePath value="$PROJECT_DIR$" />
-      <framework value="gotest" />
-      <pattern value="^\QTestDeleteCategorySuccess\E$" />
-      <method v="2" />
-    </configuration>
-    <configuration name="TestSearchCategorySuccess in WeekendPOS/tests" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestSearchCategorySuccess in WeekendPOS/tests (1)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="WeekendPOS" />
       <working_directory value="$PROJECT_DIR$/tests" />
       <root_directory value="$PROJECT_DIR$" />
@@ -135,7 +116,31 @@
       <pattern value="^\QTestSearchCategorySuccess\E$" />
       <method v="2" />
     </configuration>
-    <configuration name="go test WeekendPOS/tests" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+    <configuration name="TestSearchCategoryWithFilter in WeekendPOS/tests (1)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="WeekendPOS" />
+      <working_directory value="$PROJECT_DIR$/tests" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="WeekendPOS/tests" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestSearchCategoryWithFilter\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="TestSearchCategoryWithFilter in WeekendPOS/tests" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="WeekendPOS" />
+      <working_directory value="$PROJECT_DIR$/tests" />
+      <root_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="WeekendPOS/tests" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$" />
+      <framework value="gotest" />
+      <pattern value="^\QTestSearchCategoryWithFilter\E$" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go test WeekendPOS/tests (1)" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="WeekendPOS" />
       <working_directory value="$PROJECT_DIR$/tests" />
       <root_directory value="$PROJECT_DIR$" />
@@ -148,11 +153,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Test.TestSearchCategorySuccess in WeekendPOS/tests" />
-        <item itemvalue="Go Test.TestDeleteCategorySuccess in WeekendPOS/tests" />
-        <item itemvalue="Go Test.go test WeekendPOS/tests" />
-        <item itemvalue="Go Test.TestCreateCategoryFailed in WeekendPOS/tests" />
-        <item itemvalue="Go Test.TestCreateCategorySuccess in WeekendPOS/tests" />
+        <item itemvalue="Go Test.TestCreateProductSuccess in WeekendPOS/tests" />
+        <item itemvalue="Go Test.TestSearchCategoryWithFilter in WeekendPOS/tests (1)" />
+        <item itemvalue="Go Test.TestSearchCategoryWithFilter in WeekendPOS/tests" />
+        <item itemvalue="Go Test.go test WeekendPOS/tests (1)" />
+        <item itemvalue="Go Test.TestSearchCategorySuccess in WeekendPOS/tests (1)" />
       </list>
     </recent_temporary>
   </component>
@@ -173,7 +178,8 @@
     <MESSAGE value="fix: success create unit test register and downgrade kafka package" />
     <MESSAGE value="feat: create entity category, detail transcation, employee, product, and transaction" />
     <MESSAGE value="test: success test section user" />
-    <option name="LAST_COMMIT_MESSAGE" value="test: success test section user" />
+    <MESSAGE value="test: success test section category" />
+    <option name="LAST_COMMIT_MESSAGE" value="test: success test section category" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
