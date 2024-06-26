@@ -8,6 +8,7 @@ import (
 )
 
 func ClearAll() {
+	ClearProducts()
 	ClearCategories()
 	ClearUsers()
 }
@@ -23,6 +24,13 @@ func ClearCategories() {
 	err := db.Where("id IS NOT NULL").Delete(&entity.Category{}).Error
 	if err != nil {
 		log.Fatalf("Failed clear category data : %+v", err)
+	}
+}
+
+func ClearProducts() {
+	err := db.Where("id IS NOT NULL").Delete(&entity.Product{}).Error
+	if err != nil {
+		log.Fatalf("Failed clear product data : %+v", err)
 	}
 }
 

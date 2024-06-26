@@ -58,6 +58,13 @@ func (s *ProductService) Create(ctx context.Context, request *model.CreateProduc
 		return nil, fiber.ErrInternalServerError
 	}
 
+	category := new(entity.Category)
+	if err := s.CategoryRepository.FindById(tx, category, request.CategoryID); err != nil {
+		s.Log.WithError(err).Error("failed to find category.")
+		return nil, fiber.ErrNotFound
+	}
+	product.Category = *category
+
 	if err := tx.Commit().Error; err != nil {
 		s.Log.WithError(err).Error("failed to commit transaction.")
 		return nil, fiber.ErrInternalServerError
@@ -69,4 +76,15 @@ func (s *ProductService) Create(ctx context.Context, request *model.CreateProduc
 		return nil, fiber.ErrInternalServerError
 	}
 	return converter.ProductToResponse(product), nil
+}
+
+func (s *ProductService) Get(ctx context.Context, request *model.GetProductRequest) (*model.ProductResponse, error) {
+	tx := s.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	if err := s.Validate.Struct(request); err != nil {
+		s.Log.WithError(err).Error("validation error request body.")
+		return nil, fiber.ErrBadRequest
+	}
+
 }
