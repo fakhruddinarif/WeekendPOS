@@ -86,5 +86,55 @@ func (s *ProductService) Get(ctx context.Context, request *model.GetProductReque
 		s.Log.WithError(err).Error("validation error request body.")
 		return nil, fiber.ErrBadRequest
 	}
+	product := new(entity.Product)
+	if err := s.ProductRepository.FindById(tx, product, request.ID, request.UserID); err != nil {
+		s.Log.WithError(err).Error("failed to find product.")
+		return nil, fiber.ErrNotFound
+	}
+	category := new(entity.Category)
+	if err := s.CategoryRepository.FindById(tx, category, product.CategoryId); err != nil {
+		s.Log.WithError(err).Error("failed to find category.")
+		return nil, fiber.ErrNotFound
+	}
+	product.Category = *category
 
+	if err := tx.Commit().Error; err != nil {
+		s.Log.WithError(err).Error("failed to commit transaction.")
+		return nil, fiber.ErrInternalServerError
+	}
+	return converter.ProductToResponse(product), nil
+}
+
+func (s *ProductService) List(ctx context.Context, request *model.SearchProductRequest) ([]model.ProductResponse, int64, error) {
+	tx := s.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	if err := s.Validate.Struct(request); err != nil {
+		s.Log.WithError(err).Error("validation error request body.")
+		return nil, 0, fiber.ErrBadRequest
+	}
+
+	products, total, err := s.ProductRepository.Search(tx, request)
+
+	if err != nil {
+		s.Log.WithError(err).Error("failed to search product.")
+		return nil, 0, fiber.ErrInternalServerError
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		s.Log.WithError(err).Error("failed to commit transaction.")
+		return nil, 0, fiber.ErrInternalServerError
+	}
+
+	responses := make([]model.ProductResponse, len(products))
+	for i, product := range products {
+		category := new(entity.Category)
+		if err := s.CategoryRepository.FindById(tx, category, product.CategoryId); err != nil {
+			s.Log.WithError(err).Error("failed to find category.")
+			return nil, 0, fiber.ErrNotFound
+		}
+		product.Category = *category
+		responses[i] = *converter.ProductToResponse(&product)
+	}
+	return responses, total, nil
 }

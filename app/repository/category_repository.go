@@ -21,6 +21,10 @@ func (r *CategoryRepository) FindByIdAndUserId(db *gorm.DB, category *entity.Cat
 	return db.Where("id = ? AND user_id = ?", id, user).Take(category).Error
 }
 
+func (r *CategoryRepository) FindByIdUser(db *gorm.DB, category *entity.Category, user string) error {
+	return db.Where("user_id = ?", user).Take(category).Error
+}
+
 func (r *CategoryRepository) Search(db *gorm.DB, request *model.SearchCategoryRequest) ([]entity.Category, int64, error) {
 	var categories []entity.Category
 	var total int64 = 0

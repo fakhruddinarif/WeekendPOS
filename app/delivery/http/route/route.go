@@ -43,4 +43,6 @@ func (c *RouteConfig) SetupAuthRoute() {
 	// Product
 	productRoutes := c.App.Group("/api/product", c.AuthMiddleware)
 	productRoutes.Post("/", c.ProductController.Create)
+	productRoutes.Get("/", c.ProductController.List)
+	productRoutes.Get("/:id", c.ProductController.Get)
 }
