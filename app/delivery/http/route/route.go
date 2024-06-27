@@ -45,4 +45,6 @@ func (c *RouteConfig) SetupAuthRoute() {
 	productRoutes.Post("/", c.ProductController.Create)
 	productRoutes.Get("/", c.ProductController.List)
 	productRoutes.Get("/:id", c.ProductController.Get)
+	productRoutes.Put("/:id", c.ProductController.Update)
+	productRoutes.Delete("/:id", c.ProductController.Delete)
 }

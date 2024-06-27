@@ -22,16 +22,16 @@ func ProductToResponse(product *entity.Product) *model.ProductResponse {
 
 func ProductToEvent(product *entity.Product) *model.ProductEvent {
 	return &model.ProductEvent{
-		ID:        product.ID,
-		SKU:       product.SKU,
-		Name:      product.Name,
-		Category:  product.Category.Name,
-		BuyPrice:  product.BuyPrice,
-		SellPrice: product.SellPrice,
-		Stock:     product.Stock,
-		Photo:     product.Photo,
-		User:      product.User.Name,
-		CreatedAt: product.CreatedAt,
-		UpdatedAt: product.UpdatedAt,
+		ID:         product.ID,
+		SKU:        product.SKU,
+		Name:       product.Name,
+		CategoryID: product.CategoryId,
+		BuyPrice:   product.BuyPrice,
+		SellPrice:  product.SellPrice,
+		Stock:      product.Stock,
+		Photo:      product.Photo,
+		UserID:     product.UserId,
+		CreatedAt:  product.CreatedAt,
+		UpdatedAt:  product.UpdatedAt,
 	}
 }

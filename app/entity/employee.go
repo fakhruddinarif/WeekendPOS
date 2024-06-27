@@ -15,6 +15,7 @@ type Employee struct {
 	Phone        string        `gorm:"column:phone;type:varchar(16);null"`
 	Address      string        `gorm:"column:address;type:varchar(255);null"`
 	Photo        string        `gorm:"column:photo;type:varchar(255);null"`
+	Token        string        `gorm:"column:token;type:varchar(255);null"`
 	User         User          `gorm:"foreignKey:user_id;references:id"`
 	UserId       string        `gorm:"column:user_id;type:char(36);not null"`
 	Transactions []Transaction `gorm:"foreignKey:employee_id;references:id"`

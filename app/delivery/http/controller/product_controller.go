@@ -78,3 +78,38 @@ func (c *ProductController) List(ctx *fiber.Ctx) error {
 	}
 	return ctx.JSON(model.WebResponse[[]model.ProductResponse]{Data: response, Paging: paging})
 }
+
+func (c *ProductController) Update(ctx *fiber.Ctx) error {
+	auth := middleware.GetUser(ctx)
+
+	request := new(model.UpdateProductRequest)
+	if err := ctx.BodyParser(request); err != nil {
+		c.Log.WithError(err).Error("Failed to parse request body")
+		return fiber.ErrBadRequest
+	}
+	request.UserID = auth.ID
+	request.ID = ctx.Params("id")
+
+	response, err := c.Service.Update(ctx.UserContext(), request)
+	if err != nil {
+		c.Log.WithError(err).Error("Failed to update product")
+		return err
+	}
+	return ctx.JSON(model.WebResponse[*model.ProductResponse]{Data: response})
+}
+
+func (c *ProductController) Delete(ctx *fiber.Ctx) error {
+	auth := middleware.GetUser(ctx)
+
+	request := &model.DeleteProductRequest{
+		ID:     ctx.Params("id"),
+		UserID: auth.ID,
+	}
+
+	err := c.Service.Delete(ctx.UserContext(), request)
+	if err != nil {
+		c.Log.WithError(err).Error("Failed to delete product")
+		return err
+	}
+	return ctx.JSON(model.WebResponse[bool]{Data: true})
+}

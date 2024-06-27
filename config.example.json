@@ -9,10 +9,6 @@
   "log": {
     "level": 6
   },
-  "jwt": {
-    "secret": "abcdefghijklmnopqrstuvwxyz",
-    "expiresIn": "1d"
-  },
   "database": {
     "username": "root",
     "password": "",
