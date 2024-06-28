@@ -4,22 +4,18 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4abf41ec-0e44-42bc-a8c1-d584190449ba" name="Changes" comment="feat: create list and get product">
-      <change afterPath="$PROJECT_DIR$/app/model/converter/employee_converter.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/model/employee_event.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/model/employee_model.go" afterDir="false" />
+    <list default="true" id="4abf41ec-0e44-42bc-a8c1-d584190449ba" name="Changes" comment="feat: success section product">
+      <change afterPath="$PROJECT_DIR$/app/delivery/http/controller/employee_controller.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/delivery/messaging/employee_consumer.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/gateway/messaging/employee_producer.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/service/employee_service.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/employee_test.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/delivery/http/controller/product_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/delivery/http/controller/product_controller.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/config/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/config/app.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/delivery/http/route/route.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/delivery/http/route/route.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/entity/employee.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/entity/employee.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/model/converter/product_converter.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/converter/product_converter.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/model/product_event.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/product_event.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/repository/employee_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/repository/employee_repository.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/service/product_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/service/product_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.example.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.example.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/migrations/20240622101955_create_table_users.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db/migrations/20240622101955_create_table_users.up.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/migrations/20240622102927_create_table_categories.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db/migrations/20240622102927_create_table_categories.up.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/migrations/20240622110639_create_table_products.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db/migrations/20240622110639_create_table_products.up.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/migrations/20240622113123_create_table_employees.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db/migrations/20240622113123_create_table_employees.up.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/worker/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/worker/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,57 +44,57 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultGoTemplateProperty": "Go File",
-    "Go Build.go build WeekendPOS.executor": "Run",
-    "Go Test.TestCreateCategoryFailed in WeekendPOS/tests.executor": "Run",
-    "Go Test.TestCreateCategorySuccess in WeekendPOS/tests.executor": "Run",
-    "Go Test.TestCreateProductFailed in WeekendPOS/tests.executor": "Run",
-    "Go Test.TestCreateProductSuccess in WeekendPOS/tests (1).executor": "Run",
-    "Go Test.TestCreateProductSuccess in WeekendPOS/tests (2).executor": "Run",
-    "Go Test.TestCreateProductSuccess in WeekendPOS/tests.executor": "Run",
-    "Go Test.TestDeleteCategorySuccess in WeekendPOS/tests.executor": "Run",
-    "Go Test.TestGetProductSuccess in WeekendPOS/tests.executor": "Run",
-    "Go Test.TestGetUserSuccess in WeekendPOS/tests.executor": "Run",
-    "Go Test.TestLoginSuccess in WeekendPOS/tests.executor": "Run",
-    "Go Test.TestLoginWrongPassword in WeekendPOS/tests.executor": "Run",
-    "Go Test.TestLoginWrongUsername in WeekendPOS/tests.executor": "Run",
-    "Go Test.TestLogoutSuccess in WeekendPOS/tests.executor": "Run",
-    "Go Test.TestRegisterFailed in WeekendPOS/tests.executor": "Run",
-    "Go Test.TestRegisterSuccess in WeekendPOS/tests (1).executor": "Run",
-    "Go Test.TestRegisterSuccess in WeekendPOS/tests (2).executor": "Run",
-    "Go Test.TestRegisterSuccess in WeekendPOS/tests (3).executor": "Run",
-    "Go Test.TestRegisterSuccess in WeekendPOS/tests (4).executor": "Run",
-    "Go Test.TestRegisterSuccess in WeekendPOS/tests.executor": "Run",
-    "Go Test.TestRegisterUsernameAlreadyExist in WeekendPOS/tests.executor": "Run",
-    "Go Test.TestSearchCategorySuccess in WeekendPOS/tests (1).executor": "Run",
-    "Go Test.TestSearchCategorySuccess in WeekendPOS/tests.executor": "Run",
-    "Go Test.TestSearchCategoryWithFilter in WeekendPOS/tests (1).executor": "Run",
-    "Go Test.TestSearchCategoryWithFilter in WeekendPOS/tests.executor": "Run",
-    "Go Test.TestUpdateUsernameSuccess in WeekendPOS/tests.executor": "Run",
-    "Go Test.go test WeekendPOS/tests (1).executor": "Run",
-    "Go Test.go test WeekendPOS/tests.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "RunOnceActivity.go.modules.automatic.dependencies.download": "true",
-    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "git-widget-placeholder": "main",
-    "go.import.settings.migrated": "true",
-    "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "C:/Users/USER",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;Go Build.go build WeekendPOS.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestCreateCategoryFailed in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestCreateCategorySuccess in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestCreateProductFailed in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestCreateProductSuccess in WeekendPOS/tests (1).executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestCreateProductSuccess in WeekendPOS/tests (2).executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestCreateProductSuccess in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestDeleteCategorySuccess in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestGetProductSuccess in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestGetUserSuccess in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestLoginSuccess in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestLoginWrongPassword in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestLoginWrongUsername in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestLogoutSuccess in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestRegisterFailed in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestRegisterSuccess in WeekendPOS/tests (1).executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestRegisterSuccess in WeekendPOS/tests (2).executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestRegisterSuccess in WeekendPOS/tests (3).executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestRegisterSuccess in WeekendPOS/tests (4).executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestRegisterSuccess in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestRegisterUsernameAlreadyExist in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestSearchCategorySuccess in WeekendPOS/tests (1).executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestSearchCategorySuccess in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestSearchCategoryWithFilter in WeekendPOS/tests (1).executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestSearchCategoryWithFilter in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.TestUpdateUsernameSuccess in WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.go test WeekendPOS/tests (1).executor&quot;: &quot;Run&quot;,
+    &quot;Go Test.go test WeekendPOS/tests.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.automatic.dependencies.download&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/USER&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Go Test.TestCreateProductSuccess in WeekendPOS/tests (2)">
     <configuration name="TestCreateProductFailed in WeekendPOS/tests" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="WeekendPOS" />
@@ -191,7 +187,8 @@
     <MESSAGE value="feat: create test and section product" />
     <MESSAGE value="test: success create test product (create success and failed)" />
     <MESSAGE value="feat: create list and get product" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: create list and get product" />
+    <MESSAGE value="feat: success section product" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: success section product" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

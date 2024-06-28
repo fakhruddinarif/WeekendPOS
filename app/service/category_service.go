@@ -177,5 +177,11 @@ func (s *CategoryService) Delete(ctx context.Context, request *model.DeleteCateg
 		return fiber.ErrInternalServerError
 	}
 
+	event := converter.CategoryToEvent(category)
+	if err := s.CategoryProducer.Send(event); err != nil {
+		s.Log.WithError(err).Error("failed to publishing category.")
+		return fiber.ErrInternalServerError
+	}
+
 	return nil
 }

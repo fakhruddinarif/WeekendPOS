@@ -44,9 +44,6 @@ type ListEmployeeRequest struct {
 	Name     string `validate:"max=255" json:"name"`
 	Email    string `validate:"max=255" json:"email"`
 	Username string `validate:"max=255" json:"username"`
-	Phone    string `validate:"max=16" json:"phone"`
-	Address  string `validate:"max=255" json:"address"`
-	Photo    string `validate:"max=255" json:"photo"`
 	Page     int    `validate:"min=1" json:"page"`
 	Size     int    `validate:"min=1,max=100" json:"size"`
 }

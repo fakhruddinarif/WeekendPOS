@@ -178,6 +178,12 @@ func (s *ProductService) Update(ctx context.Context, request *model.UpdateProduc
 		s.Log.WithError(err).Error("failed to commit transaction.")
 		return nil, fiber.ErrInternalServerError
 	}
+
+	event := converter.ProductToEvent(product)
+	if err := s.ProductProducer.Send(event); err != nil {
+		s.Log.WithError(err).Error("failed to send message.")
+		return nil, fiber.ErrInternalServerError
+	}
 	return converter.ProductToResponse(product), nil
 }
 
@@ -203,6 +209,12 @@ func (s *ProductService) Delete(ctx context.Context, request *model.DeleteProduc
 
 	if err := tx.Commit().Error; err != nil {
 		s.Log.WithError(err).Error("failed to commit transaction.")
+		return fiber.ErrInternalServerError
+	}
+
+	event := converter.ProductToEvent(product)
+	if err := s.ProductProducer.Send(event); err != nil {
+		s.Log.WithError(err).Error("failed to send message.")
 		return fiber.ErrInternalServerError
 	}
 
