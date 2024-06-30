@@ -6,12 +6,13 @@ import (
 )
 
 type RouteConfig struct {
-	App                *fiber.App
-	UserController     *controller.UserController
-	CategoryController *controller.CategoryController
-	ProductController  *controller.ProductController
-	EmployeeController *controller.EmployeeController
-	AuthMiddleware     fiber.Handler
+	App                   *fiber.App
+	UserController        *controller.UserController
+	CategoryController    *controller.CategoryController
+	ProductController     *controller.ProductController
+	EmployeeController    *controller.EmployeeController
+	TransactionController *controller.TransactionController
+	AuthMiddleware        fiber.Handler
 }
 
 func (c *RouteConfig) Setup() {
