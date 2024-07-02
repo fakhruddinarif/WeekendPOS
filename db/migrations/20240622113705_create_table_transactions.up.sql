@@ -4,7 +4,7 @@ CREATE TABLE transactions (
     date DATETIME NOT NULL,
     total DECIMAL(10, 2) NOT NULL,
     user_id CHAR(36) NOT NULL,
-    employee_id CHAR(36) NOT NULL,
+    employee_id CHAR(36) NULL DEFAULT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),

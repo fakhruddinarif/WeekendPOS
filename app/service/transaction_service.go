@@ -1,8 +1,10 @@
 package service
 
 import (
+	"WeekendPOS/app/entity"
 	"WeekendPOS/app/gateway/messaging"
 	"WeekendPOS/app/model"
+	"WeekendPOS/app/model/converter"
 	"WeekendPOS/app/repository"
 	"context"
 	"github.com/go-playground/validator/v10"
@@ -41,4 +43,64 @@ func (s *TransactionService) Create(ctx context.Context, request *model.CreateTr
 		s.Log.WithError(err).Error("validation error request body.")
 		return nil, fiber.ErrBadRequest
 	}
+
+	transaction := &entity.Transaction{
+		Customer:   request.Customer,
+		Date:       request.Date,
+		EmployeeId: request.EmployeeID,
+		UserId:     request.UserID,
+	}
+
+	if err := s.TransactionRepository.Create(tx, transaction); err != nil {
+		s.Log.WithError(err).Error("failed to create transaction.")
+		return nil, fiber.ErrInternalServerError
+	}
+
+	if err := s.TransactionRepository.LastInsertedId(tx, transaction); err != nil {
+		s.Log.WithError(err).Error("failed to get last inserted id.")
+		return nil, fiber.ErrInternalServerError
+	}
+
+	for _, detail := range request.Products {
+		product := new(entity.Product)
+		if err := s.ProductRepository.FindById(tx, product, detail.ProductID, request.UserID); err != nil {
+			s.Log.WithError(err).Error("failed to find product.")
+			return nil, fiber.ErrBadRequest
+		}
+
+		if product.Stock < detail.Amount {
+			s.Log.Error("stock not enough.")
+			return nil, fiber.ErrBadRequest
+		}
+
+		transactionDetail := &entity.DetailTransaction{
+			TransactionId: transaction.ID,
+			ProductId:     detail.ProductID,
+			Amount:        detail.Amount,
+		}
+
+		if err := s.TransactionRepository.CreateDetailTransaction(tx, transactionDetail); err != nil {
+			s.Log.WithError(err).Error("failed to create detail transaction.")
+			return nil, fiber.ErrInternalServerError
+		}
+
+		product.Stock -= detail.Amount
+		if err := s.ProductRepository.Update(tx, product); err != nil {
+			s.Log.WithError(err).Error("failed to update product.")
+			return nil, fiber.ErrInternalServerError
+		}
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		s.Log.WithError(err).Error("failed to commit transaction.")
+		return nil, fiber.ErrInternalServerError
+	}
+
+	event := converter.TransactionToEvent(transaction)
+	if err := s.TransactionProducer.Send(event); err != nil {
+		s.Log.WithError(err).Error("failed to send message.")
+		return nil, fiber.ErrInternalServerError
+	}
+
+	return converter.TransactionToResponse(transaction), nil
 }
