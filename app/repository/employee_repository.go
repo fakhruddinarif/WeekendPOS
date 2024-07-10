@@ -32,14 +32,6 @@ func (r *EmployeeRepository) Filter(request *model.ListEmployeeRequest) func(tx 
 			username = "%" + username + "%"
 			tx = tx.Where("username LIKE ?", username)
 		}
-		if phone := request.Phone; phone != "" {
-			phone = "%" + phone + "%"
-			tx = tx.Where("phone LIKE ?", phone)
-		}
-		if address := request.Address; address != "" {
-			address = "%" + address + "%"
-			tx = tx.Where("address LIKE ?", address)
-		}
 		return tx
 	}
 }

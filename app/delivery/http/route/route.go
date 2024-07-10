@@ -57,4 +57,8 @@ func (c *RouteConfig) SetupAuthRoute() {
 	employeeRoutes.Get("/:id", c.EmployeeController.Get)
 	employeeRoutes.Put("/:id", c.EmployeeController.Update)
 	employeeRoutes.Delete("/:id", c.EmployeeController.Delete)
+
+	// Transaction
+	transactionRoutes := c.App.Group("/api/transaction", c.AuthMiddleware)
+	transactionRoutes.Post("/", c.TransactionController.Create)
 }

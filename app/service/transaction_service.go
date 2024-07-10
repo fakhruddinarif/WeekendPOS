@@ -11,6 +11,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
+	"time"
 )
 
 type TransactionService struct {
@@ -46,7 +47,7 @@ func (s *TransactionService) Create(ctx context.Context, request *model.CreateTr
 
 	transaction := &entity.Transaction{
 		Customer:   request.Customer,
-		Date:       request.Date,
+		Date:       time.Now().Format("2006-01-02 15:04:05"),
 		EmployeeId: request.EmployeeID,
 		UserId:     request.UserID,
 	}
@@ -61,12 +62,17 @@ func (s *TransactionService) Create(ctx context.Context, request *model.CreateTr
 		return nil, fiber.ErrInternalServerError
 	}
 
+	total := 0.00
+	transactionDetails := make([]entity.DetailTransaction, 0)
+
 	for _, detail := range request.Products {
 		product := new(entity.Product)
 		if err := s.ProductRepository.FindById(tx, product, detail.ProductID, request.UserID); err != nil {
 			s.Log.WithError(err).Error("failed to find product.")
 			return nil, fiber.ErrBadRequest
 		}
+
+		total += product.SellPrice * float64(detail.Amount)
 
 		if product.Stock < detail.Amount {
 			s.Log.Error("stock not enough.")
@@ -77,6 +83,7 @@ func (s *TransactionService) Create(ctx context.Context, request *model.CreateTr
 			TransactionId: transaction.ID,
 			ProductId:     detail.ProductID,
 			Amount:        detail.Amount,
+			Price:         product.SellPrice,
 		}
 
 		if err := s.TransactionRepository.CreateDetailTransaction(tx, transactionDetail); err != nil {
@@ -84,12 +91,16 @@ func (s *TransactionService) Create(ctx context.Context, request *model.CreateTr
 			return nil, fiber.ErrInternalServerError
 		}
 
+		transactionDetails = append(transactionDetails, *transactionDetail)
+
 		product.Stock -= detail.Amount
 		if err := s.ProductRepository.Update(tx, product); err != nil {
 			s.Log.WithError(err).Error("failed to update product.")
 			return nil, fiber.ErrInternalServerError
 		}
 	}
+
+	transaction.Total = total
 
 	if err := tx.Commit().Error; err != nil {
 		s.Log.WithError(err).Error("failed to commit transaction.")
@@ -102,5 +113,5 @@ func (s *TransactionService) Create(ctx context.Context, request *model.CreateTr
 		return nil, fiber.ErrInternalServerError
 	}
 
-	return converter.TransactionToResponse(transaction), nil
+	return converter.TransactionToResponse(transaction, transactionDetails), nil
 }
