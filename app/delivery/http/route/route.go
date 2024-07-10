@@ -49,6 +49,7 @@ func (c *RouteConfig) SetupAuthRoute() {
 	productRoutes.Get("/:id", c.ProductController.Get)
 	productRoutes.Put("/:id", c.ProductController.Update)
 	productRoutes.Delete("/:id", c.ProductController.Delete)
+	productRoutes.Patch("/add_stock", c.ProductController.AddStock)
 
 	// Employee
 	employeeRoutes := c.App.Group("/api/employee", c.AuthMiddleware)

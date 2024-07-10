@@ -30,17 +30,6 @@ func (r *Repository[T]) CountById(db *gorm.DB, id any) (int64, error) {
 	return total, err
 }
 
-func (r *Repository[T]) CountByUsername(db *gorm.DB, username string) (int64, error) {
-	var total int64
-	err := db.Model(new(T)).Where("username = ?", username).Count(&total).Error
-	return total, err
-}
-
-func (r *Repository[T]) FindByUsername(db *gorm.DB, entity *T, username string) error {
-	return db.Where("username = ?", username).Take(entity).Error
-
-}
-
 func (r *Repository[T]) FindById(db *gorm.DB, entity *T, id any) error {
 	return db.Where("id = ?", id).Take(entity).Error
 }

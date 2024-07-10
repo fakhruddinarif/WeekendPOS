@@ -113,3 +113,21 @@ func (c *ProductController) Delete(ctx *fiber.Ctx) error {
 	}
 	return ctx.JSON(model.WebResponse[bool]{Data: true})
 }
+
+func (c *ProductController) AddStock(ctx *fiber.Ctx) error {
+	auth := middleware.GetUser(ctx)
+
+	request := new(model.UpdateProductRequest)
+	if err := ctx.BodyParser(request); err != nil {
+		c.Log.WithError(err).Error("Failed to parse request body")
+		return fiber.ErrBadRequest
+	}
+	request.UserID = auth.ID
+
+	response, err := c.Service.Update(ctx.UserContext(), request)
+	if err != nil {
+		c.Log.WithError(err).Error("Failed to add stock product")
+		return err
+	}
+	return ctx.JSON(model.WebResponse[*model.ProductResponse]{Data: response})
+}

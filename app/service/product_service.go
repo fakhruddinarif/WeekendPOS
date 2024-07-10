@@ -220,3 +220,47 @@ func (s *ProductService) Delete(ctx context.Context, request *model.DeleteProduc
 
 	return nil
 }
+
+func (s *ProductService) AddStock(ctx context.Context, request *model.AddStockProductRequest) (*model.ProductResponse, error) {
+	tx := s.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	if err := s.Validate.Struct(request); err != nil {
+		s.Log.WithError(err).Error("validation error request body.")
+		return nil, fiber.ErrBadRequest
+	}
+
+	product := new(entity.Product)
+	if err := s.ProductRepository.FindById(tx, product, request.ID, request.UserID); err != nil {
+		s.Log.WithError(err).Error("failed to find product.")
+		return nil, fiber.ErrNotFound
+	}
+
+	product.Stock += request.Stock
+
+	category := new(entity.Category)
+	if err := s.CategoryRepository.FindById(tx, category, product.CategoryId); err != nil {
+		s.Log.WithError(err).Error("failed to find category.")
+		return nil, fiber.ErrNotFound
+	}
+
+	product.Category = *category
+
+	if err := s.ProductRepository.Update(tx, product); err != nil {
+		s.Log.WithError(err).Error("failed to add stock product.")
+		return nil, fiber.ErrInternalServerError
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		s.Log.WithError(err).Error("failed to commit transaction.")
+		return nil, fiber.ErrInternalServerError
+	}
+
+	event := converter.ProductToEvent(product)
+	if err := s.ProductProducer.Send(event); err != nil {
+		s.Log.WithError(err).Error("failed to send message.")
+		return nil, fiber.ErrInternalServerError
+	}
+
+	return converter.ProductToResponse(product), nil
+}

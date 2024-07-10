@@ -57,3 +57,9 @@ type DeleteProductRequest struct {
 	UserID string `validate:"required,max=36" json:"user_id"`
 	ID     string `validate:"required,max=36" json:"id"`
 }
+
+type AddStockProductRequest struct {
+	UserID string `validate:"required,max=36" json:"user_id"`
+	ID     string `validate:"required,max=36" json:"id"`
+	Stock  int    `validate:"required" json:"stock"`
+}
