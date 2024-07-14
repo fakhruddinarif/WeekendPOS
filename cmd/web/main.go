@@ -12,6 +12,7 @@ func main() {
 	validate := config.NewValidator(viperConfig)
 	app := config.NewFiber(viperConfig)
 	producer := config.NewKafkaProducer(viperConfig, log)
+	s3 := config.NewS3Client(viperConfig)
 
 	config.Bootstrap(&config.BootstrapConfig{
 		DB:       db,
@@ -20,6 +21,7 @@ func main() {
 		Validate: validate,
 		Config:   viperConfig,
 		Producer: producer,
+		S3:       s3,
 	})
 
 	webPort := viperConfig.GetInt("web.port")

@@ -33,5 +33,14 @@
         "reset": "earliest"
       }
     }
+  },
+  "s3": {
+    "access-key-id": "access",
+    "secret-access-key": "secret",
+    "region": "ap-southeast-1",
+    "bucket": "weekend-pos",
+    "endpoint": "http://localhost:9000",
+    "path-style": true,
+    "url": "http://localhost:9000/weekend-pos"
   }
 }

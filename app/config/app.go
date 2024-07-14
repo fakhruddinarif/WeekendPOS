@@ -7,6 +7,7 @@ import (
 	"WeekendPOS/app/gateway/messaging"
 	"WeekendPOS/app/repository"
 	"WeekendPOS/app/service"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
@@ -22,6 +23,7 @@ type BootstrapConfig struct {
 	Validate *validator.Validate
 	Config   *viper.Viper
 	Producer *kafka.Producer
+	S3       *s3.Client
 }
 
 func Bootstrap(config *BootstrapConfig) {
@@ -40,7 +42,7 @@ func Bootstrap(config *BootstrapConfig) {
 	transactionProducer := messaging.NewTransactionProducer(config.Producer, config.Log)
 
 	// setup service
-	userService := service.NewUserService(config.DB, config.Log, config.Validate, userRepository, userProducer)
+	userService := service.NewUserService(config.DB, config.Log, config.Validate, userRepository, userProducer, config.S3)
 	categoryService := service.NewCategoryService(config.DB, config.Log, config.Validate, categoryRepository, categoryProducer)
 	productService := service.NewProductService(config.DB, config.Log, config.Validate, productRepository, categoryRepository, productProducer)
 	employeeService := service.NewEmployeeService(config.DB, config.Log, config.Validate, employeeRepository, employeeProducer)

@@ -12,6 +12,7 @@ func UserToResponse(user *entity.User) *model.UserResponse {
 		Name:      user.Name,
 		Email:     user.Email,
 		Phone:     user.Phone,
+		Photo:     user.Photo,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}
@@ -29,6 +30,7 @@ func UserToEvent(user *entity.User) *model.UserEvent {
 		Name:      user.Name,
 		Email:     user.Email,
 		Phone:     user.Phone,
+		Photo:     user.Photo,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}

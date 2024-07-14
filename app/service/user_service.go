@@ -6,13 +6,19 @@ import (
 	"WeekendPOS/app/model"
 	"WeekendPOS/app/model/converter"
 	"WeekendPOS/app/repository"
+	"bytes"
 	"context"
+	"fmt"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"mime/multipart"
 )
 
 type UserService struct {
@@ -21,16 +27,18 @@ type UserService struct {
 	Validate       *validator.Validate
 	UserRepository *repository.UserRepository
 	UserProducer   *messaging.UserProducer
+	S3Client       *s3.Client
 }
 
 func NewUserService(db *gorm.DB, logger *logrus.Logger, validate *validator.Validate,
-	userRepository *repository.UserRepository, userProducer *messaging.UserProducer) *UserService {
+	userRepository *repository.UserRepository, userProducer *messaging.UserProducer, s3 *s3.Client) *UserService {
 	return &UserService{
 		DB:             db,
 		Log:            logger,
 		Validate:       validate,
 		UserRepository: userRepository,
 		UserProducer:   userProducer,
+		S3Client:       s3,
 	}
 }
 
@@ -41,48 +49,57 @@ func (s *UserService) Verify(ctx context.Context, request *model.VerifyUserReque
 	err := s.Validate.Struct(request)
 	if err != nil {
 		s.Log.Warnf("Invalid request body : %+v", err)
-		return nil, fiber.ErrBadRequest
+		return nil, fiber.NewError(fiber.StatusBadRequest, "Invalid request body")
 	}
 
 	user := new(entity.User)
 	if err := s.UserRepository.FindByToken(tx, user, request.Token); err != nil {
 		s.Log.Warnf("Failed find user by token : %+v", err)
-		return nil, fiber.ErrNotFound
+		return nil, fiber.NewError(fiber.StatusNotFound, "User not found")
 	}
 
 	if err := tx.Commit().Error; err != nil {
 		s.Log.Warnf("Failed commit transaction : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed commit transaction")
 	}
 
 	return &model.Auth{ID: user.ID}, nil
 }
 
-func (s *UserService) Create(ctx context.Context, request *model.RegisterUserRequest) (*model.UserResponse, error) {
+func (s *UserService) Create(ctx context.Context, request *model.RegisterUserRequest, fileHeader *multipart.FileHeader) (*model.UserResponse, error) {
 	tx := s.DB.WithContext(ctx).Begin()
 	defer tx.Rollback()
 
 	err := s.Validate.Struct(request)
 	if err != nil {
 		s.Log.Warnf("Invalid request body : %+v", err)
-		return nil, fiber.ErrBadRequest
+		return nil, fiber.NewError(fiber.StatusBadRequest, "Invalid request body")
 	}
 
 	total, err := s.UserRepository.CountByUsername(tx, request.Username)
 	if err != nil {
 		s.Log.Warnf("Failed count user from database : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed find user from database")
 	}
 
 	if total > 0 {
 		s.Log.Warnf("User already exists : %+v", err)
-		return nil, fiber.ErrConflict
+		return nil, fiber.NewError(fiber.StatusConflict, "Username already exists")
 	}
 
 	password, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
 	if err != nil {
 		s.Log.Warnf("Failed to generate bcrype hash : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed to generate bcrype hash")
+	}
+
+	var url string
+	if fileHeader != nil {
+		url, err = s.uploadImage(fileHeader)
+		if err != nil {
+			s.Log.Warnf("Failed to upload image : %+v", err)
+			return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed to upload image")
+		}
 	}
 
 	user := &entity.User{
@@ -91,24 +108,24 @@ func (s *UserService) Create(ctx context.Context, request *model.RegisterUserReq
 		Name:     request.Name,
 		Email:    request.Email,
 		Phone:    request.Phone,
-		Photo:    request.Photo,
+		Photo:    url,
 	}
 
 	if err := s.UserRepository.Create(tx, user); err != nil {
 		s.Log.Warnf("Failed create user to database : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed create user to database")
 	}
 
 	if err := tx.Commit().Error; err != nil {
 		s.Log.Warnf("Failed commit transaction : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed commit transaction")
 	}
 
 	event := converter.UserToEvent(user)
 	s.Log.Info("Publishing user created event")
 	if err = s.UserProducer.Send(event); err != nil {
 		s.Log.Warnf("Failed publish user created event : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed publish user created event")
 	}
 
 	return converter.UserToResponse(user), nil
@@ -120,36 +137,36 @@ func (s *UserService) Login(ctx context.Context, request *model.LoginUserRequest
 
 	if err := s.Validate.Struct(request); err != nil {
 		s.Log.Warnf("Invalid request body  : %+v", err)
-		return nil, fiber.ErrBadRequest
+		return nil, fiber.NewError(fiber.StatusBadRequest, "Invalid request body")
 	}
 
 	user := new(entity.User)
 	if err := s.UserRepository.FindByUsername(tx, user, request.Username); err != nil {
 		s.Log.Warnf("Failed find user by username : %+v", err)
-		return nil, fiber.ErrUnauthorized
+		return nil, fiber.NewError(fiber.StatusUnauthorized, "Username or password is incorrect")
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(request.Password)); err != nil {
 		s.Log.Warnf("Failed to compare user password with bcrype hash : %+v", err)
-		return nil, fiber.ErrUnauthorized
+		return nil, fiber.NewError(fiber.StatusUnauthorized, "Username or password is incorrect")
 	}
 
 	user.Token = uuid.New().String()
 	if err := s.UserRepository.Update(tx, user); err != nil {
 		s.Log.Warnf("Failed save user : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed save token user")
 	}
 
 	if err := tx.Commit().Error; err != nil {
 		s.Log.Warnf("Failed commit transaction : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed commit transaction")
 	}
 
 	event := converter.UserToEvent(user)
 	s.Log.Info("Publishing user created event")
 	if err := s.UserProducer.Send(event); err != nil {
 		s.Log.Warnf("Failed publish user created event : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed publish user created event")
 	}
 
 	return converter.UserToTokenResponse(user), nil
@@ -161,18 +178,18 @@ func (s *UserService) Get(ctx context.Context, request *model.GetUserRequest) (*
 
 	if err := s.Validate.Struct(request); err != nil {
 		s.Log.Warnf("Invalid request body : %+v", err)
-		return nil, fiber.ErrBadRequest
+		return nil, fiber.NewError(fiber.StatusBadRequest, "Invalid request body")
 	}
 
 	user := new(entity.User)
 	if err := s.UserRepository.FindById(tx, user, request.ID); err != nil {
 		s.Log.Warnf("Failed find user by id : %+v", err)
-		return nil, fiber.ErrNotFound
+		return nil, fiber.NewError(fiber.StatusNotFound, "User not found")
 	}
 
 	if err := tx.Commit().Error; err != nil {
 		s.Log.Warnf("Failed commit transaction : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed commit transaction")
 	}
 	return converter.UserToResponse(user), nil
 }
@@ -183,13 +200,13 @@ func (s *UserService) Update(ctx context.Context, request *model.UpdateUserReque
 
 	if err := s.Validate.Struct(request); err != nil {
 		s.Log.Warnf("Invalid request body : %+v", err)
-		return nil, fiber.ErrBadRequest
+		return nil, fiber.NewError(fiber.StatusBadRequest, "Invalid request body")
 	}
 
 	user := new(entity.User)
 	if err := s.UserRepository.FindById(tx, user, request.ID); err != nil {
 		s.Log.Warnf("Failed find user by id : %+v", err)
-		return nil, fiber.ErrNotFound
+		return nil, fiber.NewError(fiber.StatusNotFound, "User not found")
 	}
 
 	setIfNotEmpty(&user.Name, request.Name)
@@ -200,24 +217,24 @@ func (s *UserService) Update(ctx context.Context, request *model.UpdateUserReque
 		password, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
 		if err != nil {
 			s.Log.Warnf("Failed to generate bcrype hash : %+v", err)
-			return nil, fiber.ErrInternalServerError
+			return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed to generate bcrype hash")
 		}
 		user.Password = string(password)
 	}
 	if err := s.UserRepository.Update(tx, user); err != nil {
 		s.Log.Warnf("Failed save user : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed update user")
 	}
 
 	if err := tx.Commit().Error; err != nil {
 		s.Log.Warnf("Failed commit transaction : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed commit transaction")
 	}
 	event := converter.UserToEvent(user)
 	s.Log.Info("Publishing user updated event")
 	if err := s.UserProducer.Send(event); err != nil {
 		s.Log.Warnf("Failed publish user updated event : %+v", err)
-		return nil, fiber.ErrInternalServerError
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed publish user updated event")
 	}
 	return converter.UserToResponse(user), nil
 }
@@ -228,31 +245,31 @@ func (s *UserService) Logout(ctx context.Context, request *model.LogoutUserReque
 
 	if err := s.Validate.Struct(request); err != nil {
 		s.Log.Warnf("Invalid request body : %+v", err)
-		return false, fiber.ErrBadRequest
+		return false, fiber.NewError(fiber.StatusBadRequest, "Invalid request body")
 	}
 
 	user := new(entity.User)
 	if err := s.UserRepository.FindById(tx, user, request.ID); err != nil {
 		s.Log.Warnf("Failed find user by id : %+v", err)
-		return false, fiber.ErrNotFound
+		return false, fiber.NewError(fiber.StatusNotFound, "User not found")
 	}
 
 	user.Token = ""
 	if err := s.UserRepository.Update(tx, user); err != nil {
 		s.Log.Warnf("Failed save user : %+v", err)
-		return false, fiber.ErrInternalServerError
+		return false, fiber.NewError(fiber.StatusInternalServerError, "Failed update user")
 	}
 
 	if err := tx.Commit().Error; err != nil {
 		s.Log.Warnf("Failed commit transaction : %+v", err)
-		return false, fiber.ErrInternalServerError
+		return false, fiber.NewError(fiber.StatusInternalServerError, "Failed commit transaction")
 	}
 
 	event := converter.UserToEvent(user)
 	s.Log.Info("Publishing user updated event")
 	if err := s.UserProducer.Send(event); err != nil {
 		s.Log.Warnf("Failed publish user updated event : %+v", err)
-		return false, fiber.ErrInternalServerError
+		return false, fiber.NewError(fiber.StatusInternalServerError, "Failed publish user updated event")
 	}
 	return true, nil
 }
@@ -261,4 +278,36 @@ func setIfNotEmpty(target *string, value string) {
 	if value != "" {
 		*target = value
 	}
+}
+
+func (s *UserService) uploadImage(fileHeader *multipart.FileHeader) (string, error) {
+	// Open the file
+	file, err := fileHeader.Open()
+	if err != nil {
+		s.Log.Error("Failed to open file: ", err)
+		return "", err
+	}
+	defer file.Close()
+
+	buffer := bytes.NewBuffer(nil)
+	if _, err := buffer.ReadFrom(file); err != nil {
+		s.Log.Error("Failed to read file: ", err)
+		return "", err
+	}
+
+	key := fmt.Sprintf("user/%s-%s", uuid.New().String(), fileHeader.Filename)
+
+	_, err = s.S3Client.PutObject(context.TODO(), &s3.PutObjectInput{
+		Bucket: aws.String(viper.GetString("s3.bucket")),
+		Key:    aws.String(key),
+		Body:   bytes.NewReader(buffer.Bytes()),
+	})
+	if err != nil {
+		s.Log.Error("Failed to upload file to S3: ", err)
+		return "", err
+	}
+
+	url := fmt.Sprintf("%s/%s", viper.GetString("s3.url"), key)
+
+	return url, nil
 }

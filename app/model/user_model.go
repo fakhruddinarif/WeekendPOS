@@ -1,6 +1,8 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 type UserResponse struct {
 	ID        string    `json:"id,omitempty"`
@@ -24,7 +26,6 @@ type RegisterUserRequest struct {
 	Password string `validate:"required,max=255" json:"password"`
 	Email    string `validate:"required,max=255" json:"email"`
 	Phone    string `validate:"max=16" json:"phone"`
-	Photo    string `validate:"max=255" json:"photo"`
 }
 
 type UpdateUserRequest struct {

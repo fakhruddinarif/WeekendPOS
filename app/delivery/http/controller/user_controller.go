@@ -21,14 +21,27 @@ func NewUserController(service *service.UserService, logger *logrus.Logger) *Use
 }
 
 func (c *UserController) Register(ctx *fiber.Ctx) error {
-	request := new(model.RegisterUserRequest)
-	err := ctx.BodyParser(request)
-	if err != nil {
-		c.Log.Warnf("Failed to parse request body : %+v", err)
-		return fiber.ErrBadRequest
+	name := ctx.FormValue("name")
+	username := ctx.FormValue("username")
+	password := ctx.FormValue("password")
+	email := ctx.FormValue("email")
+	phone := ctx.FormValue("phone")
+
+	request := &model.RegisterUserRequest{
+		Name:     name,
+		Username: username,
+		Password: password,
+		Email:    email,
+		Phone:    phone,
 	}
 
-	response, err := c.Service.Create(ctx.UserContext(), request)
+	fileHeader, err := ctx.FormFile("photo")
+	if err != nil {
+		c.Log.Warnf("Failed to retrieve file: %+v", err)
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Failed to retrieve file"})
+	}
+
+	response, err := c.Service.Create(ctx.UserContext(), request, fileHeader)
 	if err != nil {
 		c.Log.Warnf("Failed to register user : %+v", err)
 		return err
