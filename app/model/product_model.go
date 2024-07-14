@@ -23,7 +23,6 @@ type CreateProductRequest struct {
 	BuyPrice   float64   `validate:"required" json:"buy_price"`
 	SellPrice  float64   `validate:"required" json:"sell_price"`
 	Stock      int       `validate:"required" json:"stock"`
-	Photo      string    `json:"photo"`
 	CreatedAt  time.Time `json:"created_at,omitempty"`
 	UpdatedAt  time.Time `json:"updated_at,omitempty"`
 }

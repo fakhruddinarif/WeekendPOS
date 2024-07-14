@@ -7,10 +7,12 @@ import (
 	"WeekendPOS/app/model/converter"
 	"WeekendPOS/app/repository"
 	"context"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
+	"mime/multipart"
 )
 
 type ProductService struct {
@@ -20,9 +22,10 @@ type ProductService struct {
 	ProductRepository  *repository.ProductRepository
 	CategoryRepository *repository.CategoryRepository
 	ProductProducer    *messaging.ProductProducer
+	S3Client           *s3.Client
 }
 
-func NewProductService(db *gorm.DB, log *logrus.Logger, validate *validator.Validate, productRepository *repository.ProductRepository, categoryRepository *repository.CategoryRepository, productProducer *messaging.ProductProducer) *ProductService {
+func NewProductService(db *gorm.DB, log *logrus.Logger, validate *validator.Validate, productRepository *repository.ProductRepository, categoryRepository *repository.CategoryRepository, productProducer *messaging.ProductProducer, s3 *s3.Client) *ProductService {
 	return &ProductService{
 		DB:                 db,
 		Log:                log,
@@ -30,16 +33,27 @@ func NewProductService(db *gorm.DB, log *logrus.Logger, validate *validator.Vali
 		ProductRepository:  productRepository,
 		CategoryRepository: categoryRepository,
 		ProductProducer:    productProducer,
+		S3Client:           s3,
 	}
 }
 
-func (s *ProductService) Create(ctx context.Context, request *model.CreateProductRequest) (*model.ProductResponse, error) {
+func (s *ProductService) Create(ctx context.Context, request *model.CreateProductRequest, fileHeader *multipart.FileHeader) (*model.ProductResponse, error) {
 	tx := s.DB.WithContext(ctx).Begin()
 	defer tx.Rollback()
 
 	if err := s.Validate.Struct(request); err != nil {
 		s.Log.WithError(err).Error("validation error request body.")
 		return nil, fiber.ErrBadRequest
+	}
+
+	var url string
+	var err error
+	if fileHeader != nil {
+		url, err = UploadImage("product", s.S3Client, fileHeader)
+		if err != nil {
+			s.Log.Warnf("Failed to upload image : %+v", err)
+			return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed to upload image")
+		}
 	}
 
 	product := &entity.Product{
@@ -49,7 +63,7 @@ func (s *ProductService) Create(ctx context.Context, request *model.CreateProduc
 		BuyPrice:   request.BuyPrice,
 		SellPrice:  request.SellPrice,
 		Stock:      request.Stock,
-		Photo:      request.Photo,
+		Photo:      url,
 		UserId:     request.UserID,
 	}
 

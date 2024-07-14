@@ -44,7 +44,7 @@ func Bootstrap(config *BootstrapConfig) {
 	// setup service
 	userService := service.NewUserService(config.DB, config.Log, config.Validate, userRepository, userProducer, config.S3)
 	categoryService := service.NewCategoryService(config.DB, config.Log, config.Validate, categoryRepository, categoryProducer)
-	productService := service.NewProductService(config.DB, config.Log, config.Validate, productRepository, categoryRepository, productProducer)
+	productService := service.NewProductService(config.DB, config.Log, config.Validate, productRepository, categoryRepository, productProducer, config.S3)
 	employeeService := service.NewEmployeeService(config.DB, config.Log, config.Validate, employeeRepository, employeeProducer)
 	transactionService := service.NewTransactionService(config.DB, config.Log, config.Validate, transactionRepository, employeeRepository, productRepository, transactionProducer)
 

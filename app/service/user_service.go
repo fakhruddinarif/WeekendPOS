@@ -6,16 +6,12 @@ import (
 	"WeekendPOS/app/model"
 	"WeekendPOS/app/model/converter"
 	"WeekendPOS/app/repository"
-	"bytes"
 	"context"
-	"fmt"
-	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 	"mime/multipart"
@@ -95,7 +91,7 @@ func (s *UserService) Create(ctx context.Context, request *model.RegisterUserReq
 
 	var url string
 	if fileHeader != nil {
-		url, err = s.uploadImage(fileHeader)
+		url, err = UploadImage("user", s.S3Client, fileHeader)
 		if err != nil {
 			s.Log.Warnf("Failed to upload image : %+v", err)
 			return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed to upload image")
@@ -194,7 +190,7 @@ func (s *UserService) Get(ctx context.Context, request *model.GetUserRequest) (*
 	return converter.UserToResponse(user), nil
 }
 
-func (s *UserService) Update(ctx context.Context, request *model.UpdateUserRequest) (*model.UserResponse, error) {
+func (s *UserService) Update(ctx context.Context, request *model.UpdateUserRequest, fileHeader *multipart.FileHeader) (*model.UserResponse, error) {
 	tx := s.DB.WithContext(ctx).Begin()
 	defer tx.Rollback()
 
@@ -221,6 +217,15 @@ func (s *UserService) Update(ctx context.Context, request *model.UpdateUserReque
 		}
 		user.Password = string(password)
 	}
+	if fileHeader != nil {
+		url, err := UploadImage("user", s.S3Client, fileHeader)
+		if err != nil {
+			s.Log.Warnf("Failed to upload image : %+v", err)
+			return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed to upload image")
+		}
+		user.Photo = url
+	}
+
 	if err := s.UserRepository.Update(tx, user); err != nil {
 		s.Log.Warnf("Failed save user : %+v", err)
 		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed update user")
@@ -278,36 +283,4 @@ func setIfNotEmpty(target *string, value string) {
 	if value != "" {
 		*target = value
 	}
-}
-
-func (s *UserService) uploadImage(fileHeader *multipart.FileHeader) (string, error) {
-	// Open the file
-	file, err := fileHeader.Open()
-	if err != nil {
-		s.Log.Error("Failed to open file: ", err)
-		return "", err
-	}
-	defer file.Close()
-
-	buffer := bytes.NewBuffer(nil)
-	if _, err := buffer.ReadFrom(file); err != nil {
-		s.Log.Error("Failed to read file: ", err)
-		return "", err
-	}
-
-	key := fmt.Sprintf("user/%s-%s", uuid.New().String(), fileHeader.Filename)
-
-	_, err = s.S3Client.PutObject(context.TODO(), &s3.PutObjectInput{
-		Bucket: aws.String(viper.GetString("s3.bucket")),
-		Key:    aws.String(key),
-		Body:   bytes.NewReader(buffer.Bytes()),
-	})
-	if err != nil {
-		s.Log.Error("Failed to upload file to S3: ", err)
-		return "", err
-	}
-
-	url := fmt.Sprintf("%s/%s", viper.GetString("s3.url"), key)
-
-	return url, nil
 }

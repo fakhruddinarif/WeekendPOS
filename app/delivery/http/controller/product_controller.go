@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
 	"math"
+	"strconv"
 )
 
 type ProductController struct {
@@ -23,15 +24,30 @@ func NewProductController(service *service.ProductService, log *logrus.Logger) *
 
 func (c *ProductController) Create(ctx *fiber.Ctx) error {
 	auth := middleware.GetUser(ctx)
+	sku := ctx.FormValue("sku")
+	name := ctx.FormValue("name")
+	categoryID := ctx.FormValue("category_id")
+	buyPrice, _ := strconv.ParseFloat(ctx.FormValue("buy_price"), 64)
+	sellPrice, _ := strconv.ParseFloat(ctx.FormValue("sell_price"), 64)
+	stock, _ := strconv.Atoi(ctx.FormValue("stock"))
 
-	request := new(model.CreateProductRequest)
-	if err := ctx.BodyParser(request); err != nil {
-		c.Log.WithError(err).Error("Failed to parse request body")
-		return fiber.ErrBadRequest
+	request := &model.CreateProductRequest{
+		UserID:     auth.ID,
+		SKU:        sku,
+		Name:       name,
+		CategoryID: categoryID,
+		BuyPrice:   buyPrice,
+		SellPrice:  sellPrice,
+		Stock:      stock,
 	}
-	request.UserID = auth.ID
 
-	response, err := c.Service.Create(ctx.UserContext(), request)
+	fileHeader, err := ctx.FormFile("photo")
+	if err != nil {
+		c.Log.Warnf("Failed to retrieve file: %+v", err)
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Failed to retrieve file"})
+	}
+
+	response, err := c.Service.Create(ctx.UserContext(), request, fileHeader)
 	if err != nil {
 		c.Log.WithError(err).Error("Failed to create product")
 		return err

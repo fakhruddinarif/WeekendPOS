@@ -4,19 +4,15 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4abf41ec-0e44-42bc-a8c1-d584190449ba" name="Changes" comment="feat: success api create transaction">
-      <change afterPath="$PROJECT_DIR$/app/config/s3.go" afterDir="false" />
+    <list default="true" id="4abf41ec-0e44-42bc-a8c1-d584190449ba" name="Changes" comment="modify: add photo url and send images profile on s3 object storage">
+      <change afterPath="$PROJECT_DIR$/app/service/service.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/config/app.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/config/app.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/delivery/http/controller/product_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/delivery/http/controller/product_controller.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/delivery/http/controller/user_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/delivery/http/controller/user_controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/model/converter/user_converter.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/converter/user_converter.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/model/user_event.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/user_event.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/model/user_model.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/user_model.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/model/product_model.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/product_model.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/service/product_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/service/product_service.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/service/user_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/service/user_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/web/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/web/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config.example.json" beforeDir="false" afterPath="$PROJECT_DIR$/config.example.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/go.sum" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -192,7 +188,8 @@
     <MESSAGE value="feat: success section employee (No Test Case employee and product)" />
     <MESSAGE value="feat: success create service transaction" />
     <MESSAGE value="feat: success api create transaction" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: success api create transaction" />
+    <MESSAGE value="modify: add photo url and send images profile on s3 object storage" />
+    <option name="LAST_COMMIT_MESSAGE" value="modify: add photo url and send images profile on s3 object storage" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

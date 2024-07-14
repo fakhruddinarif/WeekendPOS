@@ -82,14 +82,28 @@ func (c *UserController) Get(ctx *fiber.Ctx) error {
 func (c *UserController) Update(ctx *fiber.Ctx) error {
 	auth := middleware.GetUser(ctx)
 
-	request := new(model.UpdateUserRequest)
-	if err := ctx.BodyParser(request); err != nil {
-		c.Log.Warnf("Failed to parse request body : %+v", err)
-		return fiber.ErrBadRequest
+	name := ctx.FormValue("name")
+	username := ctx.FormValue("username")
+	password := ctx.FormValue("password")
+	email := ctx.FormValue("email")
+	phone := ctx.FormValue("phone")
+
+	request := &model.UpdateUserRequest{
+		ID:       auth.ID,
+		Name:     name,
+		Email:    email,
+		Phone:    phone,
+		Username: username,
+		Password: password,
 	}
 
-	request.ID = auth.ID
-	response, err := c.Service.Update(ctx.UserContext(), request)
+	fileHeader, err := ctx.FormFile("photo")
+	if err != nil {
+		c.Log.Warnf("Failed to retrieve file: %+v", err)
+		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Failed to retrieve file"})
+	}
+
+	response, err := c.Service.Update(ctx.UserContext(), request, fileHeader)
 	if err != nil {
 		c.Log.Warnf("Failed to update user : %+v", err)
 		return err
