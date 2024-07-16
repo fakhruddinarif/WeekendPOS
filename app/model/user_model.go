@@ -10,7 +10,7 @@ type UserResponse struct {
 	Username  string    `json:"username,omitempty"`
 	Email     string    `json:"email,omitempty"`
 	Phone     string    `json:"phone,omitempty"`
-	Photo     string    `json:"photo,omitempty"`
+	Photo     *string   `json:"photo,omitempty"`
 	Token     string    `json:"token,omitempty"`
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	UpdatedAt time.Time `json:"updated_at,omitempty"`

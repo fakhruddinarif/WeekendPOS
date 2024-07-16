@@ -10,7 +10,7 @@ type ProductResponse struct {
 	BuyPrice  float64   `json:"buy_price,omitempty"`
 	SellPrice float64   `json:"sell_price,omitempty"`
 	Stock     int       `json:"stock,omitempty"`
-	Photo     string    `json:"photo,omitempty"`
+	Photo     *string   `json:"photo,omitempty"`
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }

@@ -15,7 +15,7 @@ type Product struct {
 	BuyPrice   float64   `gorm:"column:buy_price;type:decimal(10,2);not null;"`
 	SellPrice  float64   `gorm:"column:sell_price;type:decimal(10,2);not null;"`
 	Stock      int       `gorm:"column:stock;type:int;not null;"`
-	Photo      string    `gorm:"column:photo;type:varchar(255);null"`
+	Photo      *string   `gorm:"column:photo;type:varchar(255);null"`
 	User       User      `gorm:"foreignKey:user_id;references:id"`
 	UserId     string    `gorm:"column:user_id;type:char(36);not null"`
 	CreatedAt  time.Time `gorm:"column:created_at;autoCreateTime:milli"`

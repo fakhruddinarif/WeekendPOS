@@ -37,6 +37,11 @@ func main() {
 	employeeHandler := messaging.NewEmployeeConsumer(logger)
 	go messaging.ConsumeTopic(ctx, employeeConsumer, "employees", logger, employeeHandler.Consume)
 
+	logger.Info("setup transaction consumer")
+	transactionConsumer := config.NewKafkaConsumer(viperConfig, logger)
+	transactionHandler := messaging.NewTransactionConsumer(logger)
+	go messaging.ConsumeTopic(ctx, transactionConsumer, "transactions", logger, transactionHandler.Consume)
+
 	logger.Info("Worker is running")
 
 	terminateSignals := make(chan os.Signal, 1)

@@ -89,7 +89,7 @@ func (s *UserService) Create(ctx context.Context, request *model.RegisterUserReq
 		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed to generate bcrype hash")
 	}
 
-	var url string
+	var url *string
 	if fileHeader != nil {
 		url, err = UploadImage("user", s.S3Client, fileHeader)
 		if err != nil {

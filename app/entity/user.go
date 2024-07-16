@@ -8,7 +8,7 @@ import (
 
 type User struct {
 	ID           string        `gorm:"column:id;primaryKey;type:char(36);not null;unique;index"`
-	Photo        string        `gorm:"column:photo;type:varchar(255);null"`
+	Photo        *string       `gorm:"column:photo;type:varchar(255);null"`
 	Name         string        `gorm:"column:name;type:varchar(255);not null"`
 	Username     string        `gorm:"column:username;type:varchar(255);not null;unique"`
 	Password     string        `gorm:"column:password;type:varchar(255);not null"`

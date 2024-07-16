@@ -46,7 +46,7 @@ func (s *ProductService) Create(ctx context.Context, request *model.CreateProduc
 		return nil, fiber.ErrBadRequest
 	}
 
-	var url string
+	var url *string
 	var err error
 	if fileHeader != nil {
 		url, err = UploadImage("product", s.S3Client, fileHeader)
@@ -174,7 +174,6 @@ func (s *ProductService) Update(ctx context.Context, request *model.UpdateProduc
 	product.BuyPrice = request.BuyPrice
 	product.SellPrice = request.SellPrice
 	product.Stock = request.Stock
-	product.Photo = request.Photo
 
 	category := new(entity.Category)
 	if err := s.CategoryRepository.FindById(tx, category, product.CategoryId); err != nil {

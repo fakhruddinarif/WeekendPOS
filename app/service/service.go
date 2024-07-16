@@ -11,16 +11,16 @@ import (
 	"mime/multipart"
 )
 
-func UploadImage(entity string, s3Client *s3.Client, fileHeader *multipart.FileHeader) (string, error) {
+func UploadImage(entity string, s3Client *s3.Client, fileHeader *multipart.FileHeader) (*string, error) {
 	file, err := fileHeader.Open()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	defer file.Close()
 
 	buffer := bytes.NewBuffer(nil)
 	if _, err := buffer.ReadFrom(file); err != nil {
-		return "", err
+		return nil, err
 	}
 
 	key := fmt.Sprintf("%s/%s-%s", entity, uuid.New().String(), fileHeader.Filename)
@@ -31,9 +31,9 @@ func UploadImage(entity string, s3Client *s3.Client, fileHeader *multipart.FileH
 		Body:   bytes.NewReader(buffer.Bytes()),
 	})
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	url := fmt.Sprintf("%s/%s", viper.GetString("s3.url"), key)
-	return url, nil
+	return &url, nil
 }

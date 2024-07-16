@@ -8,7 +8,7 @@ type UserEvent struct {
 	Email     string    `json:"email,omitempty"`
 	Phone     string    `json:"phone,omitempty"`
 	Username  string    `json:"username,omitempty"`
-	Photo     string    `json:"photo,omitempty"`
+	Photo     *string   `json:"photo,omitempty"`
 	CreatedAt time.Time `json:"created_at,omitempty"`
 	UpdatedAt time.Time `json:"updated_at,omitempty"`
 }
