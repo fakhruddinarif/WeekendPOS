@@ -35,11 +35,7 @@ func (c *UserController) Register(ctx *fiber.Ctx) error {
 		Phone:    phone,
 	}
 
-	fileHeader, err := ctx.FormFile("photo")
-	if err != nil {
-		c.Log.Warnf("Failed to retrieve file: %+v", err)
-		return ctx.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Failed to retrieve file"})
-	}
+	fileHeader, _ := ctx.FormFile("photo")
 
 	response, err := c.Service.Create(ctx.UserContext(), request, fileHeader)
 	if err != nil {

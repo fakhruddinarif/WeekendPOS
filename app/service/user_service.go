@@ -103,7 +103,7 @@ func (s *UserService) Create(ctx context.Context, request *model.RegisterUserReq
 		Password: string(password),
 		Name:     request.Name,
 		Email:    request.Email,
-		Phone:    request.Phone,
+		Phone:    &request.Phone,
 		Photo:    url,
 	}
 
@@ -147,7 +147,8 @@ func (s *UserService) Login(ctx context.Context, request *model.LoginUserRequest
 		return nil, fiber.NewError(fiber.StatusUnauthorized, "Username or password is incorrect")
 	}
 
-	user.Token = uuid.New().String()
+	token := uuid.New().String()
+	user.Token = &token
 	if err := s.UserRepository.Update(tx, user); err != nil {
 		s.Log.Warnf("Failed save user : %+v", err)
 		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed save token user")
@@ -207,7 +208,7 @@ func (s *UserService) Update(ctx context.Context, request *model.UpdateUserReque
 
 	setIfNotEmpty(&user.Name, request.Name)
 	setIfNotEmpty(&user.Email, request.Email)
-	setIfNotEmpty(&user.Phone, request.Phone)
+	setIfNotEmpty(user.Phone, request.Phone)
 	setIfNotEmpty(&user.Username, request.Username)
 	if request.Password != "" {
 		password, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
@@ -259,7 +260,7 @@ func (s *UserService) Logout(ctx context.Context, request *model.LogoutUserReque
 		return false, fiber.NewError(fiber.StatusNotFound, "User not found")
 	}
 
-	user.Token = ""
+	user.Token = nil
 	if err := s.UserRepository.Update(tx, user); err != nil {
 		s.Log.Warnf("Failed save user : %+v", err)
 		return false, fiber.NewError(fiber.StatusInternalServerError, "Failed update user")

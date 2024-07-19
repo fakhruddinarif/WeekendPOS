@@ -4,19 +4,18 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4abf41ec-0e44-42bc-a8c1-d584190449ba" name="Changes" comment="modify: add photo url and send images product on s3 object storage">
-      <change afterPath="$PROJECT_DIR$/app/delivery/messaging/transaction_consumer.go" afterDir="false" />
+    <list default="true" id="4abf41ec-0e44-42bc-a8c1-d584190449ba" name="Changes" comment="modify: event subject transaction">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/entity/product.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/entity/product.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/delivery/http/controller/user_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/delivery/http/controller/user_controller.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/entity/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/entity/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/model/product_event.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/product_event.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/model/product_model.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/product_model.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/model/user_event.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/user_event.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/model/user_model.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/user_model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/service/product_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/service/product_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/service/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/service/service.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/service/user_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/service/user_service.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cmd/worker/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/worker/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/migrations/20240622101955_create_table_users.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db/migrations/20240622101955_create_table_users.up.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/migrations/20240622102927_create_table_categories.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db/migrations/20240622102927_create_table_categories.up.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/migrations/20240622110639_create_table_products.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db/migrations/20240622110639_create_table_products.up.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/migrations/20240622113123_create_table_employees.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db/migrations/20240622113123_create_table_employees.up.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/migrations/20240622113705_create_table_transactions.up.sql" beforeDir="false" afterPath="$PROJECT_DIR$/db/migrations/20240622113705_create_table_transactions.up.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -194,7 +193,8 @@
     <MESSAGE value="feat: success api create transaction" />
     <MESSAGE value="modify: add photo url and send images profile on s3 object storage" />
     <MESSAGE value="modify: add photo url and send images product on s3 object storage" />
-    <option name="LAST_COMMIT_MESSAGE" value="modify: add photo url and send images product on s3 object storage" />
+    <MESSAGE value="modify: event subject transaction" />
+    <option name="LAST_COMMIT_MESSAGE" value="modify: event subject transaction" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

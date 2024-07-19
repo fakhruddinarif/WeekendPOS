@@ -13,8 +13,8 @@ type User struct {
 	Username     string        `gorm:"column:username;type:varchar(255);not null;unique"`
 	Password     string        `gorm:"column:password;type:varchar(255);not null"`
 	Email        string        `gorm:"column:email;type:varchar(255);not null;unique"`
-	Phone        string        `gorm:"column:phone;type:varchar(16);null"`
-	Token        string        `gorm:"column:token;type:varchar(255);null"`
+	Phone        *string       `gorm:"column:phone;type:varchar(16);null"`
+	Token        *string       `gorm:"column:token;type:varchar(255);null"`
 	Categories   []Category    `gorm:"foreignKey:user_id;references:id"`
 	Products     []Product     `gorm:"foreignKey:user_id;references:id"`
 	Employees    []Employee    `gorm:"foreignKey:user_id;references:id"`
