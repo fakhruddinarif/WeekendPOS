@@ -28,4 +28,4 @@ docker-compose.yml
 # Idea
 .idea
 
-mysql/mysql.sock
+mysql/*
