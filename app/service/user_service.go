@@ -98,12 +98,17 @@ func (s *UserService) Create(ctx context.Context, request *model.RegisterUserReq
 		}
 	}
 
+	var phone *string
+	if request.Phone != "" {
+		phone = &request.Phone
+	}
+
 	user := &entity.User{
 		Username: request.Username,
 		Password: string(password),
 		Name:     request.Name,
 		Email:    request.Email,
-		Phone:    &request.Phone,
+		Phone:    phone,
 		Photo:    url,
 	}
 
@@ -282,6 +287,6 @@ func (s *UserService) Logout(ctx context.Context, request *model.LogoutUserReque
 
 func setIfNotEmpty(target *string, value string) {
 	if value != "" {
-		*target = value
+		target = &value
 	}
 }

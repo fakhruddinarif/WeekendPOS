@@ -15,6 +15,7 @@ func UserToResponse(user *entity.User) *model.UserResponse {
 		Photo:     user.Photo,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
+		DeletedAt: user.DeletedAt,
 	}
 }
 func UserToTokenResponse(user *entity.User) *model.UserResponse {
@@ -33,5 +34,6 @@ func UserToEvent(user *entity.User) *model.UserEvent {
 		Photo:     user.Photo,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
+		DeletedAt: user.DeletedAt,
 	}
 }

@@ -1,19 +1,21 @@
 package model
 
 import (
+	"gorm.io/gorm"
 	"time"
 )
 
 type UserResponse struct {
-	ID        string    `json:"id,omitempty"`
-	Name      string    `json:"name,omitempty"`
-	Username  string    `json:"username,omitempty"`
-	Email     string    `json:"email,omitempty"`
-	Phone     *string   `json:"phone,omitempty"`
-	Photo     *string   `json:"photo,omitempty"`
-	Token     *string   `json:"token,omitempty"`
-	CreatedAt time.Time `json:"created_at,omitempty"`
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	ID        string         `json:"id,omitempty"`
+	Name      string         `json:"name,omitempty"`
+	Username  string         `json:"username,omitempty"`
+	Email     string         `json:"email,omitempty"`
+	Phone     *string        `json:"phone,omitempty"`
+	Photo     *string        `json:"photo,omitempty"`
+	Token     *string        `json:"token,omitempty"`
+	CreatedAt time.Time      `json:"created_at,omitempty"`
+	UpdatedAt time.Time      `json:"updated_at,omitempty"`
+	DeletedAt gorm.DeletedAt `json:"deleted_at,omitempty"`
 }
 
 type VerifyUserRequest struct {
@@ -29,7 +31,7 @@ type RegisterUserRequest struct {
 }
 
 type UpdateUserRequest struct {
-	ID       string `validate:"max=36" json:"id"`
+	ID       string `validate:"required,max=36" json:"id"`
 	Name     string `validate:"max=255" json:"name"`
 	Email    string `validate:"max=255" json:"email"`
 	Phone    string `validate:"max=16" json:"phone"`
