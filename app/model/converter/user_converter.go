@@ -30,7 +30,7 @@ func UserToResponse(user *entity.User, employees []entity.User) *model.UserRespo
 		Phone:     user.Phone,
 		Photo:     user.Photo,
 		Role:      user.Role,
-		Employee:  &employeeResponse,
+		Employees: &employeeResponse,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 		DeletedAt: user.DeletedAt,

@@ -16,7 +16,8 @@ type User struct {
 	Phone        *string        `gorm:"column:phone;type:varchar(16);null"`
 	Token        *string        `gorm:"column:token;type:varchar(255);null"`
 	Role         string         `gorm:"column:role;type:enum('owner','employee');not null;default:'employee'"`
-	Employee     *[]User        `gorm:"foreignKey:user_id;references:id"`
+	Employees    *[]User        `gorm:"foreignKey:user_id;references:id"`
+	UserId       *string        `gorm:"column:user_id;type:char(36);null"`
 	Categories   []Category     `gorm:"foreignKey:user_id;references:id"`
 	Products     []Product      `gorm:"foreignKey:user_id;references:id"`
 	Transactions []Transaction  `gorm:"foreignKey:user_id;references:id"`

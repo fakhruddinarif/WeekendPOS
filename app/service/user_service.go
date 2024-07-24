@@ -102,6 +102,12 @@ func (s *UserService) Create(ctx context.Context, request *model.RegisterUserReq
 	if request.Phone != "" {
 		phone = &request.Phone
 	}
+	var role string
+	if request.Role != "" {
+		role = request.Role
+	} else {
+		role = "employee"
+	}
 
 	user := &entity.User{
 		Username: request.Username,
@@ -110,6 +116,8 @@ func (s *UserService) Create(ctx context.Context, request *model.RegisterUserReq
 		Email:    request.Email,
 		Phone:    phone,
 		Photo:    url,
+		Role:     role,
+		UserId:   request.UserId,
 	}
 
 	if err := s.UserRepository.Create(tx, user); err != nil {
@@ -285,8 +293,30 @@ func (s *UserService) Logout(ctx context.Context, request *model.LogoutUserReque
 	return true, nil
 }
 
-func setIfNotEmpty(target *string, value string) {
-	if value != "" {
-		target = &value
+func (s *UserService) GetEmployees(ctx context.Context, request *model.GetUserRequest) (*[]model.UserResponse, error) {
+	tx := s.DB.WithContext(ctx).Begin()
+	defer tx.Rollback()
+
+	if err := s.Validate.Struct(request); err != nil {
+		s.Log.Warnf("Invalid request body : %+v", err)
+		return nil, fiber.NewError(fiber.StatusBadRequest, "Invalid request body")
 	}
+
+	users, err := s.UserRepository.FindByRole(tx, "employee")
+	if err != nil {
+		s.Log.Warnf("Failed find user by role : %+v", err)
+		return nil, fiber.NewError(fiber.StatusNotFound, "Employees not found")
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		s.Log.Warnf("Failed commit transaction : %+v", err)
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed commit transaction")
+	}
+
+	var employees []model.UserResponse
+	for _, user := range users {
+		employees = append(employees, *converter.UserToResponse(&user, users))
+	}
+
+	return &employees, nil
 }

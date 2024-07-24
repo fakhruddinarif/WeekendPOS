@@ -14,7 +14,7 @@ type UserResponse struct {
 	Photo     *string         `json:"photo,omitempty"`
 	Token     *string         `json:"token,omitempty"`
 	Role      string          `json:"role,omitempty"`
-	Employee  *[]UserResponse `json:"employee,omitempty"`
+	Employees *[]UserResponse `json:"employees,omitempty"`
 	CreatedAt time.Time       `json:"created_at,omitempty"`
 	UpdatedAt time.Time       `json:"updated_at,omitempty"`
 	DeletedAt gorm.DeletedAt  `json:"deleted_at,omitempty"`
@@ -25,11 +25,13 @@ type VerifyUserRequest struct {
 }
 
 type RegisterUserRequest struct {
-	Name     string `validate:"required,max=255" json:"name"`
-	Username string `validate:"required,max=255" json:"username"`
-	Password string `validate:"required,max=255" json:"password"`
-	Email    string `validate:"required,max=255" json:"email"`
-	Phone    string `validate:"max=16" json:"phone"`
+	Name     string  `validate:"required,max=255" json:"name"`
+	Username string  `validate:"required,max=255" json:"username"`
+	Password string  `validate:"required,max=255" json:"password"`
+	Email    string  `validate:"required,max=255" json:"email"`
+	Phone    string  `validate:"max=16" json:"phone"`
+	Role     string  `validate:"max=255" json:"role"`
+	UserId   *string `json:"user_id,omitempty"`
 }
 
 type UpdateUserRequest struct {

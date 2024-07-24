@@ -26,6 +26,7 @@ func (c *UserController) Register(ctx *fiber.Ctx) error {
 	password := ctx.FormValue("password")
 	email := ctx.FormValue("email")
 	phone := ctx.FormValue("phone")
+	role := ctx.FormValue("role")
 
 	request := &model.RegisterUserRequest{
 		Name:     name,
@@ -33,7 +34,10 @@ func (c *UserController) Register(ctx *fiber.Ctx) error {
 		Password: password,
 		Email:    email,
 		Phone:    phone,
+		Role:     role,
 	}
+
+	request.UserId = nil
 
 	fileHeader, _ := ctx.FormFile("photo")
 
@@ -116,4 +120,18 @@ func (c *UserController) Logout(ctx *fiber.Ctx) error {
 	}
 
 	return ctx.JSON(model.WebResponse[bool]{Data: response})
+}
+
+func (c *UserController) GetEmployees(ctx *fiber.Ctx) error {
+	auth := middleware.GetUser(ctx)
+
+	request := &model.GetUserRequest{ID: auth.ID}
+
+	response, err := c.Service.GetEmployees(ctx.UserContext(), request)
+	if err != nil {
+		c.Log.Warnf("Failed to get employees : %+v", err)
+		return err
+	}
+
+	return ctx.JSON(model.WebResponse[*[]model.UserResponse]{Data: response})
 }

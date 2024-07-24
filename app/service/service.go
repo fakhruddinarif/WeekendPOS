@@ -37,3 +37,9 @@ func UploadImage(entity string, s3Client *s3.Client, fileHeader *multipart.FileH
 	url := fmt.Sprintf("%s/%s", viper.GetString("s3.url"), key)
 	return &url, nil
 }
+
+func setIfNotEmpty(target *string, value string) {
+	if value != "" {
+		target = &value
+	}
+}
