@@ -31,8 +31,8 @@ func (r *UserRepository) FindByUsername(db *gorm.DB, user *entity.User, username
 	return db.Where("username = ?", username).Take(user).Error
 }
 
-func (r *UserRepository) FindByRole(db *gorm.DB, role string) ([]entity.User, error) {
+func (r *UserRepository) FindByRole(db *gorm.DB, role string, owner string) ([]entity.User, error) {
 	var users []entity.User
-	err := db.Where("role = ?", role).Find(&users).Error
+	err := db.Where("role = ? AND user_id = ?", role, owner).Find(&users).Error
 	return users, err
 }

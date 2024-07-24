@@ -137,7 +137,7 @@ func (s *UserService) Create(ctx context.Context, request *model.RegisterUserReq
 		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed publish user created event")
 	}
 
-	return converter.UserToResponse(user, nil), nil
+	return converter.UserToResponse(user), nil
 }
 
 func (s *UserService) Login(ctx context.Context, request *model.LoginUserRequest) (*model.UserResponse, error) {
@@ -201,7 +201,7 @@ func (s *UserService) Get(ctx context.Context, request *model.GetUserRequest) (*
 		s.Log.Warnf("Failed commit transaction : %+v", err)
 		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed commit transaction")
 	}
-	return converter.UserToResponse(user, nil), nil
+	return converter.UserToResponse(user), nil
 }
 
 func (s *UserService) Update(ctx context.Context, request *model.UpdateUserRequest, fileHeader *multipart.FileHeader) (*model.UserResponse, error) {
@@ -255,7 +255,7 @@ func (s *UserService) Update(ctx context.Context, request *model.UpdateUserReque
 		s.Log.Warnf("Failed publish user updated event : %+v", err)
 		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed publish user updated event")
 	}
-	return converter.UserToResponse(user, nil), nil
+	return converter.UserToResponse(user), nil
 }
 
 func (s *UserService) Logout(ctx context.Context, request *model.LogoutUserRequest) (bool, error) {
@@ -302,7 +302,7 @@ func (s *UserService) GetEmployees(ctx context.Context, request *model.GetUserRe
 		return nil, fiber.NewError(fiber.StatusBadRequest, "Invalid request body")
 	}
 
-	users, err := s.UserRepository.FindByRole(tx, "employee")
+	employees, err := s.UserRepository.FindByRole(tx, "employee", request.ID)
 	if err != nil {
 		s.Log.Warnf("Failed find user by role : %+v", err)
 		return nil, fiber.NewError(fiber.StatusNotFound, "Employees not found")
@@ -313,10 +313,10 @@ func (s *UserService) GetEmployees(ctx context.Context, request *model.GetUserRe
 		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed commit transaction")
 	}
 
-	var employees []model.UserResponse
-	for _, user := range users {
-		employees = append(employees, *converter.UserToResponse(&user, users))
+	employeeResponses := make([]model.UserResponse, len(employees))
+	for i, employee := range employees {
+		employeeResponses[i] = *converter.UserToResponse(&employee)
 	}
 
-	return &employees, nil
+	return &employeeResponses, nil
 }

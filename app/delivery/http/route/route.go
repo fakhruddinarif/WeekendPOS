@@ -32,6 +32,7 @@ func (c *RouteConfig) SetupAuthRoute() {
 	userRoutes.Get("/", c.UserController.Get)
 	userRoutes.Patch("/", c.UserController.Update)
 	userRoutes.Delete("/", c.UserController.Logout)
+	userRoutes.Get("/employees", c.UserController.GetEmployees)
 
 	// Category
 	categoryRoutes := c.App.Group("/api/category", c.AuthMiddleware)

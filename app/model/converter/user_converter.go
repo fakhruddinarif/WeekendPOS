@@ -5,23 +5,7 @@ import (
 	"WeekendPOS/app/model"
 )
 
-func UserToResponse(user *entity.User, employees []entity.User) *model.UserResponse {
-	employeeResponse := make([]model.UserResponse, 0)
-	for i, employee := range employees {
-		employeeResponse[i] = model.UserResponse{
-			ID:        employee.ID,
-			Username:  employee.Username,
-			Name:      employee.Name,
-			Email:     employee.Email,
-			Phone:     employee.Phone,
-			Photo:     employee.Photo,
-			Role:      employee.Role,
-			CreatedAt: employee.CreatedAt,
-			UpdatedAt: employee.UpdatedAt,
-			DeletedAt: employee.DeletedAt,
-		}
-	}
-
+func UserToResponse(user *entity.User) *model.UserResponse {
 	return &model.UserResponse{
 		ID:        user.ID,
 		Username:  user.Username,
@@ -30,7 +14,6 @@ func UserToResponse(user *entity.User, employees []entity.User) *model.UserRespo
 		Phone:     user.Phone,
 		Photo:     user.Photo,
 		Role:      user.Role,
-		Employees: &employeeResponse,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 		DeletedAt: user.DeletedAt,
@@ -39,6 +22,27 @@ func UserToResponse(user *entity.User, employees []entity.User) *model.UserRespo
 func UserToTokenResponse(user *entity.User) *model.UserResponse {
 	return &model.UserResponse{
 		Token: user.Token,
+	}
+}
+
+func UserToEmployeesResponse(employees *[]entity.User) *model.UserResponse {
+	employeesResponse := make([]model.UserResponse, 0)
+	for _, e := range *employees {
+		employeesResponse = append(employeesResponse, model.UserResponse{
+			ID:        e.ID,
+			Username:  e.Username,
+			Name:      e.Name,
+			Email:     e.Email,
+			Phone:     e.Phone,
+			Photo:     e.Photo,
+			Role:      e.Role,
+			CreatedAt: e.CreatedAt,
+			UpdatedAt: e.UpdatedAt,
+			DeletedAt: e.DeletedAt,
+		})
+	}
+	return &model.UserResponse{
+		Employees: &employeesResponse,
 	}
 }
 

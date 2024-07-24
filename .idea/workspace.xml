@@ -6,13 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="4abf41ec-0e44-42bc-a8c1-d584190449ba" name="Changes" comment="modify: add soft deletes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/delivery/http/controller/user_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/delivery/http/controller/user_controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/entity/transaction.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/entity/transaction.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/entity/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/entity/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/delivery/http/route/route.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/delivery/http/route/route.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/model/converter/user_converter.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/converter/user_converter.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/model/user_model.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/user_model.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/repository/user_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/repository/user_repository.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/service/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/service/service.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/service/user_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/service/user_service.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
