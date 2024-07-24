@@ -12,6 +12,7 @@ type UserEvent struct {
 	Phone     *string        `json:"phone,omitempty"`
 	Username  string         `json:"username,omitempty"`
 	Photo     *string        `json:"photo,omitempty"`
+	Role      string         `json:"role,omitempty"`
 	CreatedAt time.Time      `json:"created_at,omitempty"`
 	UpdatedAt time.Time      `json:"updated_at,omitempty"`
 	DeletedAt gorm.DeletedAt `json:"deleted_at,omitempty"`

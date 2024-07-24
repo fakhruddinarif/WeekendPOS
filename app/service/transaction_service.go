@@ -44,10 +44,9 @@ func (s *TransactionService) Create(ctx context.Context, request *model.CreateTr
 	}
 
 	transaction := &entity.Transaction{
-		Customer:   request.Customer,
-		Date:       time.Now().Format("2006-01-02 15:04:05"),
-		EmployeeId: request.EmployeeID,
-		UserId:     request.UserID,
+		Customer: request.Customer,
+		Date:     time.Now().Format("2006-01-02 15:04:05"),
+		UserId:   request.UserID,
 	}
 
 	if err := s.TransactionRepository.Create(tx, transaction); err != nil {

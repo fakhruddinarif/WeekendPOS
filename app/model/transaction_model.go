@@ -7,23 +7,20 @@ type TransactionResponse struct {
 	Customer  string                      `json:"customer,omitempty"`
 	Date      string                      `json:"date,omitempty"`
 	Total     float64                     `json:"total,omitempty"`
-	Employee  string                      `json:"employee,omitempty"`
 	Products  []DetailTransactionResponse `json:"products,omitempty"`
 	CreatedAt time.Time                   `json:"created_at,omitempty"`
 	UpdatedAt time.Time                   `json:"updated_at,omitempty"`
 }
 
 type CreateTransactionRequest struct {
-	UserID     string                           `validate:"required,max=36" json:"user_id"`
-	EmployeeID *string                          `validate:"omitempty,max=36" json:"employee_id"`
-	Customer   string                           `validate:"required,max=255" json:"customer"`
-	Products   []CreateDetailTransactionRequest `validate:"required,dive" json:"products"`
+	UserID   string                           `validate:"required,max=36" json:"user_id"`
+	Customer string                           `validate:"required,max=255" json:"customer"`
+	Products []CreateDetailTransactionRequest `validate:"required,dive" json:"products"`
 }
 
 type GetTransactionRequest struct {
-	UserID     string  `validate:"required,max=36" json:"user_id"`
-	EmployeeID *string `validate:"max=36" json:"employee_id"`
-	ID         string  `validate:"required,max=36" json:"id"`
+	UserID string `validate:"required,max=36" json:"user_id"`
+	ID     string `validate:"required,max=36" json:"id"`
 }
 
 type ListTransactionRequest struct {
@@ -34,9 +31,8 @@ type ListTransactionRequest struct {
 }
 
 type UpdateTransactionRequest struct {
-	UserID     string  `validate:"required,max=36" json:"user_id"`
-	EmployeeID *string `validate:"max=36" json:"employee_id"`
-	ID         string  `validate:"required,max=36" json:"id"`
-	Customer   string  `validate:"required,max=255" json:"customer"`
-	Date       string  `validate:"required" json:"date"`
+	UserID   string `validate:"required,max=36" json:"user_id"`
+	ID       string `validate:"required,max=36" json:"id"`
+	Customer string `validate:"required,max=255" json:"customer"`
+	Date     string `validate:"required" json:"date"`
 }

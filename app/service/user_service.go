@@ -129,7 +129,7 @@ func (s *UserService) Create(ctx context.Context, request *model.RegisterUserReq
 		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed publish user created event")
 	}
 
-	return converter.UserToResponse(user), nil
+	return converter.UserToResponse(user, nil), nil
 }
 
 func (s *UserService) Login(ctx context.Context, request *model.LoginUserRequest) (*model.UserResponse, error) {
@@ -193,7 +193,7 @@ func (s *UserService) Get(ctx context.Context, request *model.GetUserRequest) (*
 		s.Log.Warnf("Failed commit transaction : %+v", err)
 		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed commit transaction")
 	}
-	return converter.UserToResponse(user), nil
+	return converter.UserToResponse(user, nil), nil
 }
 
 func (s *UserService) Update(ctx context.Context, request *model.UpdateUserRequest, fileHeader *multipart.FileHeader) (*model.UserResponse, error) {
@@ -247,7 +247,7 @@ func (s *UserService) Update(ctx context.Context, request *model.UpdateUserReque
 		s.Log.Warnf("Failed publish user updated event : %+v", err)
 		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed publish user updated event")
 	}
-	return converter.UserToResponse(user), nil
+	return converter.UserToResponse(user, nil), nil
 }
 
 func (s *UserService) Logout(ctx context.Context, request *model.LogoutUserRequest) (bool, error) {

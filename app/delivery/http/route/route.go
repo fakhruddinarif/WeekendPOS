@@ -10,7 +10,6 @@ type RouteConfig struct {
 	UserController        *controller.UserController
 	CategoryController    *controller.CategoryController
 	ProductController     *controller.ProductController
-	EmployeeController    *controller.EmployeeController
 	TransactionController *controller.TransactionController
 	AuthMiddleware        fiber.Handler
 }
@@ -50,14 +49,6 @@ func (c *RouteConfig) SetupAuthRoute() {
 	productRoutes.Put("/:id", c.ProductController.Update)
 	productRoutes.Delete("/:id", c.ProductController.Delete)
 	productRoutes.Patch("/add_stock", c.ProductController.AddStock)
-
-	// Employee
-	employeeRoutes := c.App.Group("/api/employee", c.AuthMiddleware)
-	employeeRoutes.Post("/", c.EmployeeController.Create)
-	employeeRoutes.Get("/", c.EmployeeController.List)
-	employeeRoutes.Get("/:id", c.EmployeeController.Get)
-	employeeRoutes.Put("/:id", c.EmployeeController.Update)
-	employeeRoutes.Delete("/:id", c.EmployeeController.Delete)
 
 	// Transaction
 	transactionRoutes := c.App.Group("/api/transaction", c.AuthMiddleware)

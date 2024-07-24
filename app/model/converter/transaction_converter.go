@@ -21,7 +21,6 @@ func TransactionToResponse(transaction *entity.Transaction, detail []entity.Deta
 		Customer:  transaction.Customer,
 		Date:      transaction.Date,
 		Total:     transaction.Total,
-		Employee:  transaction.Employee.Name,
 		Products:  detailResponse,
 		CreatedAt: transaction.CreatedAt,
 		UpdatedAt: transaction.UpdatedAt,
@@ -30,13 +29,12 @@ func TransactionToResponse(transaction *entity.Transaction, detail []entity.Deta
 
 func TransactionToEvent(transaction *entity.Transaction) *model.TransactionEvent {
 	return &model.TransactionEvent{
-		ID:         transaction.ID,
-		Customer:   transaction.Customer,
-		Date:       transaction.Date,
-		Total:      transaction.Total,
-		UserID:     transaction.UserId,
-		EmployeeID: transaction.EmployeeId,
-		CreatedAt:  transaction.CreatedAt,
-		UpdatedAt:  transaction.UpdatedAt,
+		ID:        transaction.ID,
+		Customer:  transaction.Customer,
+		Date:      transaction.Date,
+		Total:     transaction.Total,
+		UserID:    transaction.UserId,
+		CreatedAt: transaction.CreatedAt,
+		UpdatedAt: transaction.UpdatedAt,
 	}
 }
