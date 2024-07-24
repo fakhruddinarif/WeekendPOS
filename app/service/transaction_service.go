@@ -19,18 +19,16 @@ type TransactionService struct {
 	Log                   *logrus.Logger
 	Validate              *validator.Validate
 	TransactionRepository *repository.TransactionRepository
-	EmployeeRepository    *repository.EmployeeRepository
 	ProductRepository     *repository.ProductRepository
 	TransactionProducer   *messaging.TransactionProducer
 }
 
-func NewTransactionService(db *gorm.DB, log *logrus.Logger, validate *validator.Validate, transactionRepository *repository.TransactionRepository, employeeRepository *repository.EmployeeRepository, productRepository *repository.ProductRepository, transactionProducer *messaging.TransactionProducer) *TransactionService {
+func NewTransactionService(db *gorm.DB, log *logrus.Logger, validate *validator.Validate, transactionRepository *repository.TransactionRepository, productRepository *repository.ProductRepository, transactionProducer *messaging.TransactionProducer) *TransactionService {
 	return &TransactionService{
 		DB:                    db,
 		Log:                   log,
 		Validate:              validate,
 		TransactionRepository: transactionRepository,
-		EmployeeRepository:    employeeRepository,
 		ProductRepository:     productRepository,
 		TransactionProducer:   transactionProducer,
 	}

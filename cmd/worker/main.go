@@ -32,11 +32,6 @@ func main() {
 	productHandler := messaging.NewProductConsumer(logger)
 	go messaging.ConsumeTopic(ctx, productConsumer, "products", logger, productHandler.Consume)
 
-	logger.Info("setup employee consumer")
-	employeeConsumer := config.NewKafkaConsumer(viperConfig, logger)
-	employeeHandler := messaging.NewEmployeeConsumer(logger)
-	go messaging.ConsumeTopic(ctx, employeeConsumer, "employees", logger, employeeHandler.Consume)
-
 	logger.Info("setup transaction consumer")
 	transactionConsumer := config.NewKafkaConsumer(viperConfig, logger)
 	transactionHandler := messaging.NewTransactionConsumer(logger)

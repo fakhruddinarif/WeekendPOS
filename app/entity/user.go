@@ -15,9 +15,10 @@ type User struct {
 	Email        string         `gorm:"column:email;type:varchar(255);not null;unique"`
 	Phone        *string        `gorm:"column:phone;type:varchar(16);null"`
 	Token        *string        `gorm:"column:token;type:varchar(255);null"`
+	Role         string         `gorm:"column:role;type:enum('owner','employee');not null;default:'employee'"`
+	Employee     *User          `gorm:"foreignKey:user_id;references:id"`
 	Categories   []Category     `gorm:"foreignKey:user_id;references:id"`
 	Products     []Product      `gorm:"foreignKey:user_id;references:id"`
-	Employees    []Employee     `gorm:"foreignKey:user_id;references:id"`
 	Transactions []Transaction  `gorm:"foreignKey:user_id;references:id"`
 	CreatedAt    time.Time      `gorm:"column:created_at;autoCreateTime:milli"`
 	UpdatedAt    time.Time      `gorm:"column:updated_at;autoUpdateTime:milli;autoCreateTime:milli"`
