@@ -6,6 +6,7 @@ import (
 	"WeekendPOS/app/service"
 	"github.com/gofiber/fiber/v2"
 	"github.com/sirupsen/logrus"
+	"math"
 )
 
 type UserController struct {
@@ -26,7 +27,6 @@ func (c *UserController) Register(ctx *fiber.Ctx) error {
 	password := ctx.FormValue("password")
 	email := ctx.FormValue("email")
 	phone := ctx.FormValue("phone")
-	role := ctx.FormValue("role")
 
 	request := &model.RegisterUserRequest{
 		Name:     name,
@@ -34,10 +34,8 @@ func (c *UserController) Register(ctx *fiber.Ctx) error {
 		Password: password,
 		Email:    email,
 		Phone:    phone,
-		Role:     role,
+		UserId:   nil,
 	}
-
-	request.UserId = nil
 
 	fileHeader, _ := ctx.FormFile("photo")
 
@@ -122,16 +120,59 @@ func (c *UserController) Logout(ctx *fiber.Ctx) error {
 	return ctx.JSON(model.WebResponse[bool]{Data: response})
 }
 
-func (c *UserController) GetEmployees(ctx *fiber.Ctx) error {
+func (c *UserController) AddEmployee(ctx *fiber.Ctx) error {
 	auth := middleware.GetUser(ctx)
 
-	request := &model.GetUserRequest{ID: auth.ID}
+	name := ctx.FormValue("name")
+	username := ctx.FormValue("username")
+	password := ctx.FormValue("password")
+	email := ctx.FormValue("email")
+	phone := ctx.FormValue("phone")
 
-	response, err := c.Service.GetEmployees(ctx.UserContext(), request)
+	request := &model.RegisterUserRequest{
+		Name:     name,
+		Username: username,
+		Password: password,
+		Email:    email,
+		Phone:    phone,
+		UserId:   &auth.ID,
+	}
+
+	fileHeader, _ := ctx.FormFile("photo")
+
+	response, err := c.Service.Create(ctx.UserContext(), request, fileHeader)
+	if err != nil {
+		c.Log.Warnf("Failed to add employee : %+v", err)
+		return err
+	}
+
+	return ctx.JSON(model.WebResponse[*model.UserResponse]{Data: response})
+}
+
+func (c *UserController) ListEmployees(ctx *fiber.Ctx) error {
+	auth := middleware.GetUser(ctx)
+
+	request := &model.SearchEmployeeRequest{
+		UserID:   auth.ID,
+		Name:     ctx.Query("name", ""),
+		Username: ctx.Query("username", ""),
+		Email:    ctx.Query("email", ""),
+		Page:     ctx.QueryInt("page", 1),
+		Size:     ctx.QueryInt("size", 10),
+	}
+
+	response, total, err := c.Service.GetEmployees(ctx.UserContext(), request)
 	if err != nil {
 		c.Log.Warnf("Failed to get employees : %+v", err)
 		return err
 	}
 
-	return ctx.JSON(model.WebResponse[*[]model.UserResponse]{Data: response})
+	paging := &model.PageMetadata{
+		Page:      request.Page,
+		Size:      request.Size,
+		TotalItem: total,
+		TotalPage: int64(math.Ceil(float64(total) / float64(request.Size))),
+	}
+
+	return ctx.JSON(model.WebResponse[[]model.UserResponse]{Data: response, Paging: paging})
 }

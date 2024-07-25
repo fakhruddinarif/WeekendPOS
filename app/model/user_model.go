@@ -30,7 +30,6 @@ type RegisterUserRequest struct {
 	Password string  `validate:"required,max=255" json:"password"`
 	Email    string  `validate:"required,max=255" json:"email"`
 	Phone    string  `validate:"max=16" json:"phone"`
-	Role     string  `validate:"max=255" json:"role"`
 	UserId   *string `json:"user_id,omitempty"`
 }
 
@@ -54,4 +53,13 @@ type LogoutUserRequest struct {
 
 type GetUserRequest struct {
 	ID string `validate:"required,max=36" json:"id"`
+}
+
+type SearchEmployeeRequest struct {
+	UserID   string `validate:"required,max=36" json:"user_id"`
+	Username string `validate:"max=255" json:"username"`
+	Name     string `validate:"max=255" json:"name"`
+	Email    string `validate:"max=255" json:"email"`
+	Page     int    `validate:"min=1" json:"page"`
+	Size     int    `validate:"min=1,max=100" json:"size"`
 }

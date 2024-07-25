@@ -2,6 +2,7 @@ package repository
 
 import (
 	"WeekendPOS/app/entity"
+	"WeekendPOS/app/model"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 )
@@ -31,8 +32,36 @@ func (r *UserRepository) FindByUsername(db *gorm.DB, user *entity.User, username
 	return db.Where("username = ?", username).Take(user).Error
 }
 
-func (r *UserRepository) FindByRole(db *gorm.DB, role string, owner string) ([]entity.User, error) {
+func (r *UserRepository) FindEmployeesByUserId(db *gorm.DB, request *model.SearchEmployeeRequest) ([]entity.User, int64, error) {
 	var users []entity.User
-	err := db.Where("role = ? AND user_id = ?", role, owner).Find(&users).Error
-	return users, err
+	var total int64 = 0
+
+	if err := db.Scopes(r.Filter(request)).Offset((request.Page - 1) * request.Size).Limit(request.Size).Find(&users).Error; err != nil {
+		return nil, total, err
+	}
+
+	if err := db.Model(&entity.User{}).Scopes(r.Filter(request)).Count(&total).Error; err != nil {
+		return nil, total, err
+	}
+
+	return users, total, nil
+}
+
+func (r *UserRepository) Filter(request *model.SearchEmployeeRequest) func(tx *gorm.DB) *gorm.DB {
+	return func(tx *gorm.DB) *gorm.DB {
+		tx = tx.Where("user_id = ?", request.UserID)
+		if name := request.Name; name != "" {
+			name = "%" + name + "%"
+			tx = tx.Where("name LIKE ?", name)
+		}
+		if username := request.Username; username != "" {
+			username = "%" + username + "%"
+			tx = tx.Where("username LIKE ?", username)
+		}
+		if email := request.Email; email != "" {
+			email = "%" + email + "%"
+			tx = tx.Where("email LIKE ?", email)
+		}
+		return tx
+	}
 }
