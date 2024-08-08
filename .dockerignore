@@ -1,0 +1,9 @@
+.git
+.gitignore
+
+# Idea
+.idea
+
+mysql/*
+
+tests/

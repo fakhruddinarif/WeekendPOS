@@ -28,8 +28,18 @@ func (r *UserRepository) CountByUsername(db *gorm.DB, username string) (int64, e
 	return total, err
 }
 
+func (r *UserRepository) CountByEmail(db *gorm.DB, email string) (int64, error) {
+	var total int64
+	err := db.Model(&entity.User{}).Where("email = ?", email).Count(&total).Error
+	return total, err
+}
+
 func (r *UserRepository) FindByUsername(db *gorm.DB, user *entity.User, username string) error {
 	return db.Where("username = ?", username).Take(user).Error
+}
+
+func (r *UserRepository) FindByEmail(db *gorm.DB, user *entity.User, email string) error {
+	return db.Where("email = ?", email).Take(user).Error
 }
 
 func (r *UserRepository) FindEmployeesByUserId(db *gorm.DB, request *model.SearchEmployeeRequest) ([]entity.User, int64, error) {

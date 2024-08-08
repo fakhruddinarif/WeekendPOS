@@ -5,11 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4abf41ec-0e44-42bc-a8c1-d584190449ba" name="Changes" comment="modify: add soft deletes">
+      <change afterPath="$PROJECT_DIR$/.dockerignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/delivery/http/controller/user_controller.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/delivery/http/controller/user_controller.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/delivery/http/route/route.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/delivery/http/route/route.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/model/auth.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/auth.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/model/user_model.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/model/user_model.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/repository/user_repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/repository/user_repository.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/service/user_service.go" beforeDir="false" afterPath="$PROJECT_DIR$/app/service/user_service.go" afterDir="false" />
     </list>
@@ -21,9 +20,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Dockerfile" />
         <option value="Go Application" />
         <option value="Go File" />
+        <option value="Dockerfile" />
       </list>
     </option>
   </component>

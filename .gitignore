@@ -29,3 +29,5 @@ docker-compose.yml
 .idea
 
 mysql/*
+
+Dockerfile

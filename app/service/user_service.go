@@ -83,6 +83,17 @@ func (s *UserService) Create(ctx context.Context, request *model.RegisterUserReq
 		return nil, fiber.NewError(fiber.StatusConflict, "Username already exists")
 	}
 
+	total, err = s.UserRepository.CountByEmail(tx, request.Email)
+	if err != nil {
+		s.Log.Warnf("Failed count user from database : %+v", err)
+		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed find user from database")
+	}
+
+	if total > 0 {
+		s.Log.Warnf("User already exists : %+v", err)
+		return nil, fiber.NewError(fiber.StatusConflict, "Email already exists")
+	}
+
 	password, err := bcrypt.GenerateFromPassword([]byte(request.Password), bcrypt.DefaultCost)
 	if err != nil {
 		s.Log.Warnf("Failed to generate bcrype hash : %+v", err)
