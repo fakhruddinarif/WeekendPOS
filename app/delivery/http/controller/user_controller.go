@@ -22,24 +22,14 @@ func NewUserController(service *service.UserService, logger *logrus.Logger) *Use
 }
 
 func (c *UserController) Register(ctx *fiber.Ctx) error {
-	name := ctx.FormValue("name")
-	username := ctx.FormValue("username")
-	password := ctx.FormValue("password")
-	email := ctx.FormValue("email")
-	phone := ctx.FormValue("phone")
-
-	request := &model.RegisterUserRequest{
-		Name:     name,
-		Username: username,
-		Password: password,
-		Email:    email,
-		Phone:    phone,
-		UserId:   nil,
+	request := new(model.RegisterUserRequest)
+	err := ctx.BodyParser(request)
+	if err != nil {
+		c.Log.Warnf("Failed to parse request body : %+v", err)
+		return fiber.ErrBadRequest
 	}
 
-	fileHeader, _ := ctx.FormFile("photo")
-
-	response, err := c.Service.Create(ctx.UserContext(), request, fileHeader)
+	response, err := c.Service.Create(ctx.UserContext(), request)
 	if err != nil {
 		c.Log.Warnf("Failed to register user : %+v", err)
 		return err
@@ -140,7 +130,7 @@ func (c *UserController) AddEmployee(ctx *fiber.Ctx) error {
 
 	fileHeader, _ := ctx.FormFile("photo")
 
-	response, err := c.Service.Create(ctx.UserContext(), request, fileHeader)
+	response, err := c.Service.AddEmployee(ctx.UserContext(), request, fileHeader)
 	if err != nil {
 		c.Log.Warnf("Failed to add employee : %+v", err)
 		return err

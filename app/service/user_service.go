@@ -62,7 +62,7 @@ func (s *UserService) Verify(ctx context.Context, request *model.VerifyUserReque
 	return &model.Auth{ID: user.ID, Role: user.Role}, nil
 }
 
-func (s *UserService) Create(ctx context.Context, request *model.RegisterUserRequest, fileHeader *multipart.FileHeader) (*model.UserResponse, error) {
+func (s *UserService) Create(ctx context.Context, request *model.RegisterUserRequest) (*model.UserResponse, error) {
 	tx := s.DB.WithContext(ctx).Begin()
 	defer tx.Rollback()
 
@@ -100,15 +100,6 @@ func (s *UserService) Create(ctx context.Context, request *model.RegisterUserReq
 		return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed to generate bcrype hash")
 	}
 
-	var url *string
-	if fileHeader != nil {
-		url, err = UploadImage("user", s.S3Client, fileHeader)
-		if err != nil {
-			s.Log.Warnf("Failed to upload image : %+v", err)
-			return nil, fiber.NewError(fiber.StatusInternalServerError, "Failed to upload image")
-		}
-	}
-
 	var phone *string
 	if request.Phone != "" {
 		phone = &request.Phone
@@ -120,7 +111,6 @@ func (s *UserService) Create(ctx context.Context, request *model.RegisterUserReq
 		Name:     request.Name,
 		Email:    request.Email,
 		Phone:    phone,
-		Photo:    url,
 		Role:     "owner",
 		UserId:   request.UserId,
 	}
